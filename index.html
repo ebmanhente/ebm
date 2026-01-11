@@ -1,274 +1,210 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Escola Básica de Manhente</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-  body{
-    margin:0;
-    font-family:'Montserrat',sans-serif;
-    background:#f0fdf4;
-    color:#1f2933;
-  }
+body{
+  margin:0;
+  font-family:'Montserrat',sans-serif;
+  background:#f0fdf4;
+  color:#1f2933;
+}
 
-  /* HEADER */
-  header{
-    background:linear-gradient(135deg,#166534,#15803d);
-    color:white;
-    padding:30px 20px;
-  }
-  .header-content{
-    max-width:1100px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    gap:20px;
-  }
-  .header-content img{
-    width:80px;
-    background:white;
-    border-radius:50%;
-    padding:6px;
-  }
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#166534,#15803d);
+  color:white;
+  padding:30px 20px;
+}
+.header-content{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.header-content img{
+  width:80px;
+  background:white;
+  border-radius:50%;
+  padding:6px;
+}
 
-  /* MAIN */
-  main{
-    max-width:1100px;
-    margin:40px auto;
-    padding:0 20px;
-  }
-  .grid{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:30px;
-  }
-  section{
-    background:white;
-    border-radius:16px;
-    padding:25px;
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
-  }
+/* MAIN */
+main{
+  max-width:1100px;
+  margin:40px auto;
+  padding:0 20px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:30px;
+}
+section{
+  background:white;
+  border-radius:16px;
+  padding:25px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
 
-  /* SOBRE – Ler mais (abertura suave) */
-  .sobre-intro{
-    font-size:1.05em;
-    line-height:1.6;
-    margin:0 0 10px 0;
-  }
-  .ler-mais{
-    margin-top:8px;
-    padding:10px 14px;
-    border-radius:999px;
-    border:1px solid #bbf7d0;
-    background:#dcfce7;
-    color:#166534;
-    font-weight:700;
-    cursor:pointer;
-    transition:.2s;
-  }
-  .ler-mais:hover{
-    background:#bbf7d0;
-    transform:translateY(-1px);
-  }
-  .sobre-detalhe{
-    overflow:hidden;
-    max-height:0;
-    opacity:0;
-    transition:max-height .55s ease, opacity .35s ease;
-    margin-top:10px;
-  }
-  .sobre-detalhe.aberto{
-    max-height:2000px;
-    opacity:1;
-  }
-  .sobre-caixa{
-    margin:12px 0 14px;
-    padding:15px;
-    background:#f0fdf4;
-    border-left:4px solid #16a34a;
-    border-radius:8px;
-  }
-  .sobre-lista{
-    columns:2;
-    margin:10px 0 0 18px;
-  }
-  @media (max-width:560px){
-    .sobre-lista{columns:1;}
-  }
-  .sobre-separador{
-    margin:22px 0;
-    border:none;
-    border-top:1px solid #e5e7eb;
-  }
+/* SOBRE */
+.sobre-intro{
+  font-size:1.05em;
+  line-height:1.6;
+  margin-bottom:10px;
+}
+.ler-mais{
+  margin-top:6px;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid #bbf7d0;
+  background:#dcfce7;
+  color:#166534;
+  font-weight:700;
+  cursor:pointer;
+}
+.sobre-detalhe{
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  transition:max-height .55s ease, opacity .35s ease;
+  margin-top:10px;
+}
+.sobre-detalhe.aberto{
+  max-height:2000px;
+  opacity:1;
+}
 
-  /* TEMPO MINI */
-  #tempo-mini{
-    background:linear-gradient(135deg,#2563eb,#1e40af);
-    color:white;
-    border-radius:16px;
-    padding:20px;
-    text-align:center;
-    box-shadow:0 6px 18px rgba(0,0,0,.10);
-  }
-  #linha-temp{
-    font-size:2.35em;
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-  }
-  #icone-tempo{
-    font-size:1.9em;
-    line-height:1;
-    margin-top:6px; /* por baixo da temperatura */
-  }
-  #dados-tempo{
-    font-size:.95em;
-    margin-top:10px;
-    opacity:.95;
-  }
-  #fonte{
-    font-size:.82em;
-    margin-top:6px;
-    opacity:.95;
-  }
-  #tempo-mini a{
-    display:inline-block;
-    margin-top:10px;
-    color:white;
-    text-decoration:underline;
-    font-size:.9em;
-  }
+/* TEMPO */
+#tempo-mini{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:white;
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+}
+#linha-temp{
+  font-size:2.3em;
+  font-weight:800;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+}
+#icone-tempo{
+  font-size:1.8em;
+  margin-top:6px;
+}
+#dados-tempo{
+  font-size:.9em;
+  margin-top:10px;
+}
+#fonte{
+  font-size:.8em;
+  margin-top:6px;
+}
 
-  /* BOTÕES */
-  .botoes{
-    margin-top:25px;
-    display:grid;
-    gap:12px;
-  }
-  .botao{
-    padding:14px;
-    border-radius:12px;
-    text-decoration:none;
-    color:white;
-    font-weight:700;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    transition:.2s;
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
-  }
-  .botao:hover{transform:translateY(-3px);}
-  .inovar{background:linear-gradient(135deg,#16a34a,#166534);}
-  .consulta{background:linear-gradient(135deg,#22c55e,#16a34a);}
-  .sige{background:linear-gradient(135deg,#4ade80,#15803d);}
-  .aeaf{background:linear-gradient(135deg,#22c55e,#14532d);}
+/* BOTÕES */
+.botoes{
+  margin-top:25px;
+  display:grid;
+  gap:12px;
+}
+.botao{
+  padding:14px;
+  border-radius:12px;
+  text-decoration:none;
+  color:white;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.inovar{background:#166534;}
+.consulta{background:#22c55e;}
+.sige{background:#4ade80;}
+.aeaf{background:#14532d;}
 
-  .icon-aeaf{
-    height:22px;
-    background:white;
-    border-radius:6px;
-    padding:2px 6px;
-  }
+.icon-aeaf{
+  height:22px;
+  background:white;
+  border-radius:6px;
+  padding:2px 6px;
+}
 
-  /* BEMA */
-  .bema{
-    background:linear-gradient(135deg,#fff7cc,#fde68a);
-    color:#14532d;
-    border:1px solid #86efac;
-    cursor:default;
-  }
-  .bema:hover{transform:none;}
-  .icon-bema{
-    height:34px;
-    width:auto;
-    background:rgba(255,255,255,.85);
-    border-radius:10px;
-    padding:6px 10px;
-  }
-  .texto-bema{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    line-height:1.15;
-  }
-  .bema-breve{
-    margin-top:6px;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:5px 10px;
-    border-radius:999px;
-    background:#fee2e2;
-    color:#991b1b;
-    font-weight:800;
-    font-size:.78em;
-    border:1px solid #fecaca;
-    animation:pulseBreve 2.6s ease-in-out infinite;
-  }
-  @keyframes pulseBreve{
-    0%,100%{ transform:scale(1); opacity:.92; }
-    50%{ transform:scale(1.03); opacity:1; }
-  }
+/* BEMA */
+.bema{
+  background:linear-gradient(135deg,#fff7cc,#fde68a);
+  color:#14532d;
+  cursor:default;
+}
+.icon-bema{
+  height:34px;
+  background:white;
+  border-radius:10px;
+  padding:6px 10px;
+}
+.bema-breve{
+  margin-top:6px;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#fee2e2;
+  color:#991b1b;
+  font-size:.75em;
+  font-weight:800;
+}
 
-  /* REDES */
-  #redes{
-    margin-top:40px;
-    text-align:center;
-  }
-  #redes h3{color:#166534;}
-  .redes-links{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:12px;
-    margin-top:12px;
-  }
-  .rede{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 14px;
-    border-radius:999px;
-    background:#dcfce7;
-    color:#166534;
-    text-decoration:none;
-    font-weight:700;
-    transition:.2s;
-  }
-  .rede:hover{
-    background:#bbf7d0;
-    transform:translateY(-2px);
-  }
+/* REDES */
+#redes{
+  margin-top:40px;
+  text-align:center;
+}
+.redes-links{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.rede{
+  padding:10px 14px;
+  border-radius:999px;
+  background:#dcfce7;
+  color:#166534;
+  text-decoration:none;
+  font-weight:700;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
 
-  /* CONTADOR */
-  .contador-visitas{
-    margin:14px auto 0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-    font-weight:800;
-    color:#166534;
-    opacity:.95;
-  }
-  .contador-visitas img{
-    height:22px;
-  }
+/* CONTADOR */
+.contador-visitas{
+  margin-top:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  color:#166534;
+}
+.contador-visitas img{
+  height:22px;
+}
 
-  /* FOOTER */
-  footer{
-    margin:40px 0 20px;
-    text-align:center;
-  }
-  footer img{max-width:260px;}
+/* FOOTER */
+footer{
+  margin:40px 0 20px;
+  text-align:center;
+}
+footer img{max-width:260px;}
 </style>
 </head>
 
@@ -288,105 +224,58 @@
 
 <div class="grid">
 
-  <!-- APRESENTAÇÃO -->
-  <section>
-    <h2>Sobre a Escola</h2>
+<section>
+  <h2>Sobre a Escola</h2>
 
-    <p class="sobre-intro">
-      A <strong>Escola Básica de Manhente</strong> é um estabelecimento de ensino que assegura a educação do
-      <strong>1.º ao 9.º ano de escolaridade</strong>, integrando o
-      <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
+  <p class="sobre-intro">
+    A <strong>Escola Básica de Manhente</strong> assegura a educação do
+    <strong>1.º ao 9.º ano</strong>, integrando o
+    <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
+  </p>
+
+  <button class="ler-mais" id="btn-ler-mais">Ler mais</button>
+
+  <div id="sobre-detalhe" class="sobre-detalhe">
+    <p>
+      Escola situada na freguesia de Manhente, concelho de Barcelos,
+      servindo uma comunidade educativa alargada.
     </p>
-
-    <p class="sobre-intro">
-      A escola acolhe alunos do <strong>1.º, 2.º e 3.º ciclos do ensino básico</strong>,
-      garantindo a continuidade do percurso educativo num único espaço.
-    </p>
-
-    <button class="ler-mais" id="btn-ler-mais" type="button" aria-expanded="false" aria-controls="sobre-detalhe">
-      Ler mais
-    </button>
-
-    <div id="sobre-detalhe" class="sobre-detalhe" aria-hidden="true">
-      <div class="sobre-caixa">
-        <strong>Localização e comunidade educativa</strong><br>
-        Localizada na freguesia de <strong>Manhente</strong>, no concelho de <strong>Barcelos</strong>,
-        a EB de Manhente serve uma comunidade educativa alargada, recebendo alunos de várias freguesias.
-      </div>
-
-      <p style="margin:0 0 8px 0;">Freguesias abrangidas (principais):</p>
-      <ul class="sobre-lista">
-        <li>Manhente</li>
-        <li>Galegos Santa Maria</li>
-        <li>Galegos São Martinho</li>
-        <li>Ucha</li>
-        <li>Areias de São Vicente</li>
-        <li>Lama</li>
-        <li>Oliveira</li>
-      </ul>
-
-      <p style="margin-top:15px;">
-        Em estreita articulação com as famílias e parceiros educativos, a escola promove uma
-        <strong>educação inclusiva</strong>, orientada para o <strong>sucesso escolar</strong>,
-        o <strong>desenvolvimento integral dos alunos</strong> e a sua preparação para os desafios futuros.
-      </p>
-    </div>
-
-    <hr class="sobre-separador">
-
-    <p><strong>📍 Morada:</strong><br>Praceta Manuel Maria Barbosa du Bocage</p>
-    <p><strong>📞 Telefone:</strong> 253 849 410<br>
-      <strong>✉️ Email:</strong> geral@aeaf.edu.pt</p>
-  </section>
-
-  <!-- COLUNA DIREITA -->
-  <div>
-
-    <!-- TEMPO -->
-    <div id="tempo-mini">
-      <div id="linha-temp">
-        <i class="fa-solid fa-temperature-half" aria-hidden="true"></i>
-        <span id="valor-temp">— °C</span>
-      </div>
-
-      <div id="icone-tempo">⛅</div>
-
-      <div id="dados-tempo">A carregar…</div>
-      <div id="fonte"></div>
-
-      <a href="tempo.html">Ver página do tempo completo</a>
-    </div>
-
-    <!-- BOTÕES -->
-    <div class="botoes">
-      <a class="botao inovar" href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx" target="_blank" rel="noopener">
-        <i class="fa-solid fa-book"></i> INOVAR – Sumários
-      </a>
-
-      <a class="botao consulta" href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login" target="_blank" rel="noopener">
-        <i class="fa-solid fa-user-check"></i> INOVAR Consulta
-      </a>
-
-      <a class="botao sige" href="https://inovar.aeaf.edu.pt/inovarsige/" target="_blank" rel="noopener">
-        <i class="fa-solid fa-credit-card"></i> INOVAR SIGE – Cartão
-      </a>
-
-      <a class="botao aeaf" href="https://aeaf.edu.pt" target="_blank" rel="noopener">
-        <img src="logoESAF-300x200.jpg" class="icon-aeaf" alt="AEAF">
-        Agrupamento AEAF
-      </a>
-
-      <!-- BEMA (brevemente) -->
-      <div class="botao bema" aria-disabled="true" title="Brevemente">
-        <img src="BEMA.png" class="icon-bema" alt="BEMA - Biblioteca Escolar de Manhente">
-        <div class="texto-bema">
-          Biblioteca Escolar de Manhente
-          <small class="bema-breve"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> Brevemente</small>
-        </div>
-      </div>
-    </div>
-
   </div>
+</section>
+
+<div>
+
+<div id="tempo-mini">
+  <div id="linha-temp">
+    <i class="fa-solid fa-temperature-half"></i>
+    <span id="valor-temp">— °C</span>
+  </div>
+  <div id="icone-tempo">⛅</div>
+  <div id="dados-tempo"></div>
+</div>
+
+<div class="botoes">
+  <a class="botao inovar" href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx" target="_blank">
+    INOVAR – Sumários
+  </a>
+  <a class="botao consulta" href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login" target="_blank">
+    INOVAR Consulta
+  </a>
+  <a class="botao sige" href="https://inovar.aeaf.edu.pt/inovarsige/" target="_blank">
+    INOVAR SIGE
+  </a>
+  <a class="botao aeaf" href="https://aeaf.edu.pt" target="_blank">
+    <img src="logoESAF-300x200.jpg" class="icon-aeaf"> AEAF
+  </a>
+
+  <div class="botao bema">
+    <img src="BEMA.png" class="icon-bema">
+    Biblioteca Escolar de Manhente
+    <div class="bema-breve">Brevemente</div>
+  </div>
+</div>
+
+</div>
 </div>
 
 <!-- REDES + CONTADOR -->
@@ -394,22 +283,19 @@
   <h3>Redes Sociais</h3>
 
   <div class="redes-links">
-    <a class="rede" href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank" rel="noopener">
-      <i class="fa-brands fa-facebook-f" aria-hidden="true"></i> Facebook Escola
+    <a class="rede" href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank">
+      <i class="fa-brands fa-facebook-f"></i> Facebook Escola
     </a>
-    <a class="rede" href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank" rel="noopener">
-      <i class="fa-brands fa-facebook" aria-hidden="true"></i> Facebook Biblioteca
+    <a class="rede" href="https://www.instagram.com/bibliotecademanhente/" target="_blank">
+      <i class="fa-brands fa-instagram"></i> Instagram
     </a>
-    <a class="rede" href="https://www.instagram.com/bibliotecademanhente/" target="_blank" rel="noopener">
-      <i class="fa-brands fa-instagram" aria-hidden="true"></i> Instagram
-    </a>
-    <a class="rede" href="https://www.tiktok.com/@biblioteca.manhente" target="_blank" rel="noopener">
-      <i class="fa-brands fa-tiktok" aria-hidden="true"></i> TikTok
+    <a class="rede" href="https://www.tiktok.com/@biblioteca.manhente" target="_blank">
+      <i class="fa-brands fa-tiktok"></i> TikTok
     </a>
   </div>
 
-  <!-- CONTADOR (hits.seeyoufarm) -->
-  <div class="contador-visitas" title="Contador de visitas ao site">
+  <!-- CONTADOR FUNCIONAL -->
+  <div class="contador-visitas">
     <span>Visitas:</span>
     <img
       src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Febmanhente.github.io%2Febm%2F&count_bg=%23166534&title_bg=%23DCFCE7&icon=&icon_color=%23166534&title=&edge_flat=false"
@@ -426,91 +312,9 @@
 </footer>
 
 <script>
-/* Ler mais / Ler menos (abertura suave + scroll) */
-const btn = document.getElementById("btn-ler-mais");
-const detalhe = document.getElementById("sobre-detalhe");
-
-if (btn && detalhe) {
-  btn.addEventListener("click", () => {
-    const aberto = detalhe.classList.contains("aberto");
-    detalhe.classList.toggle("aberto");
-
-    btn.textContent = aberto ? "Ler mais" : "Ler menos";
-    btn.setAttribute("aria-expanded", String(!aberto));
-    detalhe.setAttribute("aria-hidden", String(aberto));
-
-    if (!aberto) {
-      setTimeout(() => {
-        detalhe.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 180);
-    }
-  });
-}
-
-/* TEMPO (WU + Open-Meteo)
-   - termómetro + temperatura
-   - ícone por baixo
-*/
-const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
-
-function format1(n){ return Number(n).toFixed(1); }
-
-function iconeTempo(code){
-  if(code === 0) return "☀️";
-  if([1,2].includes(code)) return "🌤️";
-  if(code === 3) return "☁️";
-  if([45,48].includes(code)) return "🌫️";
-  if([51,53,55,61,63,65].includes(code)) return "🌧️";
-  if([66,67].includes(code)) return "🌧️❄️";
-  if([71,73,75,77].includes(code)) return "❄️";
-  if([80,81,82].includes(code)) return "🌦️";
-  if([95,96,99].includes(code)) return "⛈️";
-  return "🌡️";
-}
-
-function atualizarTempo(temp, hum, vento, fonte){
-  document.getElementById("valor-temp").innerText = format1(temp) + " °C";
-  document.getElementById("dados-tempo").innerText =
-    "Humidade: " + hum + " · Vento: " + format1(vento) + " km/h";
-  document.getElementById("fonte").innerText = "Fonte: " + fonte;
-}
-
-/* 1) Open-Meteo -> ícone */
-const iconePromise = fetch(
-  "https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon"
-)
-.then(r => r.json())
-.then(d => {
-  document.getElementById("icone-tempo").innerText = iconeTempo(d.current_weather.weathercode);
-})
-.catch(() => {
-  document.getElementById("icone-tempo").innerText = "🌡️";
-});
-
-/* 2) WU -> dados reais */
-Promise.all([iconePromise])
-.then(() => fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`))
-.then(r => r.json())
-.then(d => {
-  if(!d.observations) throw "offline";
-  const o = d.observations[0];
-  atualizarTempo(o.metric.temp, o.humidity + "%", o.metric.windSpeed, "Estação meteorológica da escola");
-})
-.catch(() => {
-  /* fallback Open-Meteo */
-  fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById("icone-tempo").innerText = iconeTempo(d.current_weather.weathercode);
-      atualizarTempo(d.current_weather.temperature, "—", d.current_weather.windspeed, "Modelo meteorológico");
-    })
-    .catch(() => {
-      document.getElementById("valor-temp").innerText = "— °C";
-      document.getElementById("icone-tempo").innerText = "🌡️";
-      document.getElementById("dados-tempo").innerText = "Dados indisponíveis";
-      document.getElementById("fonte").innerText = "";
-    });
-});
+document.getElementById("btn-ler-mais").onclick = () => {
+  document.getElementById("sobre-detalhe").classList.toggle("aberto");
+};
 </script>
 
 </body>
