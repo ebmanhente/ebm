@@ -6,8 +6,6 @@
 <title>Escola Básica de Manhente</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- Font Awesome (ícones oficiais) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -58,6 +56,65 @@ section{
   border-radius:16px;
   padding:25px;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+/* SOBRE – Ler mais (animação suave) */
+.sobre-intro{
+  font-size:1.05em;
+  line-height:1.6;
+}
+
+.ler-mais{
+  margin-top:6px;
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid #bbf7d0;
+  background:#dcfce7;
+  color:#166534;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.ler-mais:hover{
+  background:#bbf7d0;
+  transform:translateY(-1px);
+}
+
+.sobre-detalhe{
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  transition:max-height .5s ease, opacity .4s ease;
+  margin-top:10px;
+}
+
+.sobre-detalhe.aberto{
+  max-height:1200px; /* suficiente para o conteúdo */
+  opacity:1;
+}
+
+.sobre-caixa{
+  margin:10px 0 14px;
+  padding:15px;
+  background:#f0fdf4;
+  border-left:4px solid #16a34a;
+  border-radius:8px;
+}
+
+.sobre-lista{
+  columns:2;
+  margin-top:8px;
+}
+
+@media (max-width:560px){
+  .sobre-lista{columns:1;}
+}
+
+.sobre-separador{
+  margin:25px 0;
+  border:none;
+  border-top:1px solid #e5e7eb;
 }
 
 /* TEMPO MINI */
@@ -154,7 +211,11 @@ section{
 }
 
 .rede i{font-size:1.1em;}
-.rede:hover{background:#bbf7d0;transform:translateY(-2px);}
+
+.rede:hover{
+  background:#bbf7d0;
+  transform:translateY(-2px);
+}
 
 /* FOOTER */
 footer{
@@ -184,46 +245,100 @@ footer img{max-width:260px;}
 
 <section>
   <h2>Sobre a Escola</h2>
-  <p>
-    A Escola Básica de Manhente integra o Agrupamento de Escolas Alcaides de Faria,
-    promovendo uma educação de qualidade, próxima da comunidade.
+
+  <p class="sobre-intro">
+    A <strong>Escola Básica de Manhente</strong> assegura a educação do
+    <strong>1.º ao 9.º ano</strong>, integrando o
+    <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
   </p>
 
-  <p><strong>Morada:</strong><br>Praceta Manuel Maria Barbosa du Bocage</p>
-  <p><strong>Telefone:</strong> 253 849 410<br>
-     <strong>Email:</strong> geral@aeaf.edu.pt</p>
+  <p class="sobre-intro">
+    Acolhe alunos do <strong>1.º, 2.º e 3.º ciclos</strong>, garantindo a continuidade
+    do percurso educativo num único espaço.
+  </p>
+
+  <button class="ler-mais" id="btn-ler-mais" type="button" aria-expanded="false" aria-controls="sobre-detalhe">
+    Ler mais
+  </button>
+
+  <div id="sobre-detalhe" class="sobre-detalhe" aria-hidden="true">
+    <div class="sobre-caixa">
+      <strong>Localização e comunidade educativa</strong><br>
+      Situada na freguesia de <strong>Manhente</strong>, no concelho de <strong>Barcelos</strong>,
+      a EB de Manhente serve uma comunidade educativa alargada.
+    </div>
+
+    <p>Recebe alunos das freguesias de:</p>
+
+    <ul class="sobre-lista">
+      <li>Manhente</li>
+      <li>Galegos Santa Maria</li>
+      <li>Galegos São Martinho</li>
+      <li>Ucha</li>
+      <li>Areias de São Vicente</li>
+      <li>Lama</li>
+      <li>Oliveira</li>
+    </ul>
+
+    <p style="margin-top:15px;">
+      Em estreita articulação com as famílias e parceiros educativos,
+      a escola promove uma <strong>educação inclusiva</strong>,
+      orientada para o <strong>sucesso escolar</strong> e para o
+      <strong>desenvolvimento integral dos alunos</strong>.
+    </p>
+  </div>
+
+  <hr class="sobre-separador">
+
+  <p>
+    <strong>📍 Morada:</strong><br>
+    Praceta Manuel Maria Barbosa du Bocage
+  </p>
+
+  <p>
+    <strong>📞 Telefone:</strong> 253 849 410<br>
+    <strong>✉️ Email:</strong> geral@aeaf.edu.pt
+  </p>
 </section>
 
 <div>
 
-<div id="tempo-mini">
-  <div id="temp">
-    <span id="icone-tempo">⛅</span>
-    <span id="valor-temp">— °C</span>
+  <div id="tempo-mini">
+    <div id="temp">
+      <span id="icone-tempo">⛅</span>
+      <span id="valor-temp">— °C</span>
+    </div>
+    <div id="estado">A carregar…</div>
+    <div id="fonte"></div>
+    <a href="tempo.html">Ver página do tempo completo</a>
   </div>
-  <div id="estado">A carregar…</div>
-  <div id="fonte"></div>
-  <a href="tempo.html">Ver página do tempo completo</a>
-</div>
 
-<div class="botoes">
-  <a class="botao inovar" href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx" target="_blank">
-    <i class="fa-solid fa-book"></i> INOVAR – Sumários
-  </a>
+  <div class="botoes">
+    <a class="botao inovar"
+       href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx"
+       target="_blank" rel="noopener">
+      <i class="fa-solid fa-book"></i> INOVAR – Sumários
+    </a>
 
-  <a class="botao consulta" href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login" target="_blank">
-    <i class="fa-solid fa-user-check"></i> INOVAR Consulta
-  </a>
+    <a class="botao consulta"
+       href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login"
+       target="_blank" rel="noopener">
+      <i class="fa-solid fa-user-check"></i> INOVAR Consulta
+    </a>
 
-  <a class="botao sige" href="https://inovar.aeaf.edu.pt/inovarsige/" target="_blank">
-    <i class="fa-solid fa-credit-card"></i> INOVAR SIGE – Cartão
-  </a>
+    <a class="botao sige"
+       href="https://inovar.aeaf.edu.pt/inovarsige/"
+       target="_blank" rel="noopener">
+      <i class="fa-solid fa-credit-card"></i> INOVAR SIGE – Cartão
+    </a>
 
-  <a class="botao aeaf" href="https://aeaf.edu.pt" target="_blank">
-    <img src="logoESAF-300x200.jpg" class="icon-aeaf" alt="AEAF">
-    Agrupamento AEAF
-  </a>
-</div>
+    <a class="botao aeaf"
+       href="https://aeaf.edu.pt"
+       target="_blank" rel="noopener">
+      <img src="logoESAF-300x200.jpg" class="icon-aeaf" alt="AEAF">
+      Agrupamento AEAF
+    </a>
+  </div>
 
 </div>
 </div>
@@ -231,16 +346,16 @@ footer img{max-width:260px;}
 <div id="redes">
   <h3>Redes Sociais</h3>
   <div class="redes-links">
-    <a class="rede" href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank">
+    <a class="rede" href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank" rel="noopener">
       <i class="fa-brands fa-facebook-f"></i> Facebook Escola
     </a>
-    <a class="rede" href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank">
+    <a class="rede" href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank" rel="noopener">
       <i class="fa-brands fa-facebook"></i> Facebook Biblioteca
     </a>
-    <a class="rede" href="https://www.instagram.com/bibliotecademanhente/" target="_blank">
+    <a class="rede" href="https://www.instagram.com/bibliotecademanhente/" target="_blank" rel="noopener">
       <i class="fa-brands fa-instagram"></i> Instagram
     </a>
-    <a class="rede" href="https://www.tiktok.com/@biblioteca.manhente" target="_blank">
+    <a class="rede" href="https://www.tiktok.com/@biblioteca.manhente" target="_blank" rel="noopener">
       <i class="fa-brands fa-tiktok"></i> TikTok
     </a>
   </div>
@@ -252,43 +367,110 @@ footer img{max-width:260px;}
   <img src="uma_esc_vida.png" alt="Uma Escola Para a Vida">
 </footer>
 
-<!-- JS DO TEMPO (igual ao teu, mantido) -->
 <script>
+/* =========================
+   LER MAIS / LER MENOS
+   (animação suave + scroll)
+   ========================= */
+const btn = document.getElementById("btn-ler-mais");
+const detalhe = document.getElementById("sobre-detalhe");
+
+if (btn && detalhe) {
+  btn.addEventListener("click", () => {
+    const aberto = detalhe.classList.contains("aberto");
+
+    detalhe.classList.toggle("aberto");
+    btn.textContent = aberto ? "Ler mais" : "Ler menos";
+    btn.setAttribute("aria-expanded", String(!aberto));
+    detalhe.setAttribute("aria-hidden", String(aberto));
+
+    // quando abre, faz scroll suave para o início do bloco
+    if (!aberto) {
+      setTimeout(() => {
+        detalhe.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 180);
+    }
+  });
+}
+
+/* =========================
+   TEMPO (WU + Open-Meteo)
+   ========================= */
 const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
-function format1(n){return Number(n).toFixed(1);}
+
+function format1(n){
+  return Number(n).toFixed(1);
+}
+
+// Ícones (Open-Meteo weathercode)
 function iconeTempo(code){
-  if(code===0)return"☀️";
-  if([1,2].includes(code))return"🌤️";
-  if(code===3)return"☁️";
-  if([45,48].includes(code))return"🌫️";
-  if([51,53,55,61,63,65].includes(code))return"🌧️";
-  if([66,67].includes(code))return"🌧️❄️";
-  if([71,73,75,77].includes(code))return"❄️";
-  if([80,81,82].includes(code))return"🌦️";
-  if([95,96,99].includes(code))return"⛈️";
-  return"🌡️";
+  if(code === 0) return "☀️";
+  if([1,2].includes(code)) return "🌤️";
+  if(code === 3) return "☁️";
+  if([45,48].includes(code)) return "🌫️";
+  if([51,53,55,61,63,65].includes(code)) return "🌧️";
+  if([66,67].includes(code)) return "🌧️❄️";
+  if([71,73,75,77].includes(code)) return "❄️";
+  if([80,81,82].includes(code)) return "🌦️";
+  if([95,96,99].includes(code)) return "⛈️";
+  return "🌡️";
 }
 
 function atualizar(temp, hum, vento, fonte, icone){
-  document.getElementById("valor-temp").innerText=format1(temp)+" °C";
-  document.getElementById("icone-tempo").innerText=icone;
-  document.getElementById("estado").innerText="Humidade: "+hum+" · Vento: "+format1(vento)+" km/h";
-  document.getElementById("fonte").innerText="Fonte: "+fonte;
+  document.getElementById("valor-temp").innerText = format1(temp) + " °C";
+  document.getElementById("icone-tempo").innerText = icone || "🌡️";
+  document.getElementById("estado").innerText =
+    "Humidade: " + hum + " · Vento: " + format1(vento) + " km/h";
+  document.getElementById("fonte").innerText = "Fonte: " + fonte;
 }
 
-let iconeAtual="🌡️";
-fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
-.then(r=>r.json())
-.then(d=>iconeAtual=iconeTempo(d.current_weather.weathercode))
-.then(()=>{
+// 1) Buscar ícone (estado do tempo) no Open-Meteo
+let iconeAtual = "🌡️";
+const iconePromise = fetch(
+  "https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon"
+)
+.then(r => r.json())
+.then(d => { iconeAtual = iconeTempo(d.current_weather.weathercode); })
+.catch(() => { iconeAtual = "🌡️"; });
+
+// 2) Buscar dados da estação no WU (temperatura real)
+Promise.all([iconePromise])
+.then(() => {
   return fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`);
 })
-.then(r=>r.json())
-.then(d=>{
-  const o=d.observations[0];
-  atualizar(o.metric.temp,o.humidity+"%",o.metric.windSpeed,"Estação da escola",iconeAtual);
+.then(r => r.json())
+.then(d => {
+  if(!d.observations) throw "offline";
+  const o = d.observations[0];
+
+  atualizar(
+    o.metric.temp,
+    o.humidity + "%",
+    o.metric.windSpeed,
+    "Estação da escola",
+    iconeAtual
+  );
 })
-.catch(()=>{});
+.catch(() => {
+  // Fallback total: tudo Open-Meteo (inclui ícone)
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
+  .then(r => r.json())
+  .then(d => {
+    atualizar(
+      d.current_weather.temperature,
+      "—",
+      d.current_weather.windspeed,
+      "Modelo meteorológico",
+      iconeTempo(d.current_weather.weathercode)
+    );
+  })
+  .catch(() => {
+    document.getElementById("valor-temp").innerText = "— °C";
+    document.getElementById("icone-tempo").innerText = "🌡️";
+    document.getElementById("estado").innerText = "Dados indisponíveis";
+    document.getElementById("fonte").innerText = "";
+  });
+});
 </script>
 
 </body>
