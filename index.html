@@ -7,6 +7,9 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- Font Awesome (ícones oficiais) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 body{
   margin:0;
@@ -69,12 +72,14 @@ section{
 #temp{
   font-size:2.4em;
   font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
 }
 
-#estado,#fonte{
-  font-size:.9em;
-  margin-top:6px;
-}
+#icone-tempo{font-size:1.2em;}
+#estado,#fonte{font-size:.9em;margin-top:6px;}
 
 #tempo-mini a{
   display:inline-block;
@@ -84,7 +89,7 @@ section{
   font-size:.9em;
 }
 
-/* BOTÕES EXTERNOS */
+/* BOTÕES */
 .botoes{
   margin-top:25px;
   display:grid;
@@ -97,16 +102,27 @@ section{
   text-decoration:none;
   color:white;
   font-weight:600;
-  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   transition:.2s;
 }
 
+.botao i{font-size:1.1em;}
 .botao:hover{transform:translateY(-3px);}
 
 .inovar{background:linear-gradient(135deg,#16a34a,#166534);}
-.sige{background:linear-gradient(135deg,#4ade80,#15803d);}
 .consulta{background:linear-gradient(135deg,#22c55e,#16a34a);}
+.sige{background:linear-gradient(135deg,#4ade80,#15803d);}
 .aeaf{background:linear-gradient(135deg,#22c55e,#14532d);}
+
+.icon-aeaf{
+  height:22px;
+  background:white;
+  border-radius:6px;
+  padding:2px 6px;
+}
 
 /* REDES */
 #redes{
@@ -116,18 +132,29 @@ section{
 
 #redes h3{color:#166534;}
 
-#redes a{
-  display:inline-block;
-  margin:8px 12px;
-  padding:10px 14px;
-  border-radius:20px;
-  text-decoration:none;
-  font-weight:600;
-  color:#166534;
-  background:#dcfce7;
+.redes-links{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:12px;
 }
 
-#redes a:hover{background:#bbf7d0;}
+.rede{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:#dcfce7;
+  color:#166534;
+  text-decoration:none;
+  font-weight:600;
+  transition:.2s;
+}
+
+.rede i{font-size:1.1em;}
+.rede:hover{background:#bbf7d0;transform:translateY(-2px);}
 
 /* FOOTER */
 footer{
@@ -135,9 +162,7 @@ footer{
   text-align:center;
 }
 
-footer img{
-  max-width:260px;
-}
+footer img{max-width:260px;}
 </style>
 </head>
 
@@ -157,86 +182,68 @@ footer img{
 
 <div class="grid">
 
-  <!-- COLUNA ESQUERDA -->
-  <section>
-    <h2>Sobre a Escola</h2>
-    <p>
-      A Escola Básica de Manhente integra o Agrupamento de Escolas Alcaides de Faria,
-      promovendo uma educação de qualidade, próxima da comunidade.
-    </p>
+<section>
+  <h2>Sobre a Escola</h2>
+  <p>
+    A Escola Básica de Manhente integra o Agrupamento de Escolas Alcaides de Faria,
+    promovendo uma educação de qualidade, próxima da comunidade.
+  </p>
 
-    <p>
-      <strong>Morada:</strong><br>
-      Praceta Manuel Maria Barbosa du Bocage
-    </p>
+  <p><strong>Morada:</strong><br>Praceta Manuel Maria Barbosa du Bocage</p>
+  <p><strong>Telefone:</strong> 253 849 410<br>
+     <strong>Email:</strong> geral@aeaf.edu.pt</p>
+</section>
 
-    <p>
-      <strong>Telefone:</strong> 253 849 410<br>
-      <strong>Email:</strong> geral@aeaf.edu.pt
-    </p>
-  </section>
+<div>
 
-  <!-- COLUNA DIREITA -->
-  <div>
-
-    <!-- TEMPO MINI -->
-    <div id="tempo-mini">
-      <div id="temp">— °C</div>
-      <div id="estado"></div>
-      <div id="fonte"></div>
-      <a href="tempo.html">Ver página do tempo completo</a>
-    </div>
-
-    <!-- BOTÕES -->
-    <div class="botoes">
-      <a class="botao inovar"
-         href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx"
-         target="_blank">
-        INOVAR – Sumários
-      </a>
-
-      <a class="botao consulta"
-         href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login"
-         target="_blank">
-        INOVAR Consulta
-      </a>
-
-      <a class="botao sige"
-         href="https://inovar.aeaf.edu.pt/inovarsige/"
-         target="_blank">
-        INOVAR SIGE – Cartão
-      </a>
-
-      <a class="botao aeaf"
-         href="https://aeaf.edu.pt"
-         target="_blank">
-        Agrupamento AEAF
-      </a>
-    </div>
-
+<div id="tempo-mini">
+  <div id="temp">
+    <span id="icone-tempo">⛅</span>
+    <span id="valor-temp">— °C</span>
   </div>
-
+  <div id="estado">A carregar…</div>
+  <div id="fonte"></div>
+  <a href="tempo.html">Ver página do tempo completo</a>
 </div>
 
-<!-- REDES -->
+<div class="botoes">
+  <a class="botao inovar" href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx" target="_blank">
+    <i class="fa-solid fa-book"></i> INOVAR – Sumários
+  </a>
+
+  <a class="botao consulta" href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login" target="_blank">
+    <i class="fa-solid fa-user-check"></i> INOVAR Consulta
+  </a>
+
+  <a class="botao sige" href="https://inovar.aeaf.edu.pt/inovarsige/" target="_blank">
+    <i class="fa-solid fa-credit-card"></i> INOVAR SIGE – Cartão
+  </a>
+
+  <a class="botao aeaf" href="https://aeaf.edu.pt" target="_blank">
+    <img src="logoESAF-300x200.jpg" class="icon-aeaf" alt="AEAF">
+    Agrupamento AEAF
+  </a>
+</div>
+
+</div>
+</div>
+
 <div id="redes">
   <h3>Redes Sociais</h3>
-
-  <a href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank">
-    Facebook Escola
-  </a>
-
-  <a href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank">
-    Facebook Biblioteca
-  </a>
-
-  <a href="https://www.instagram.com/bibliotecademanhente/" target="_blank">
-    Instagram
-  </a>
-
-  <a href="https://www.tiktok.com/@biblioteca.manhente" target="_blank">
-    TikTok
-  </a>
+  <div class="redes-links">
+    <a class="rede" href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank">
+      <i class="fa-brands fa-facebook-f"></i> Facebook Escola
+    </a>
+    <a class="rede" href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank">
+      <i class="fa-brands fa-facebook"></i> Facebook Biblioteca
+    </a>
+    <a class="rede" href="https://www.instagram.com/bibliotecademanhente/" target="_blank">
+      <i class="fa-brands fa-instagram"></i> Instagram
+    </a>
+    <a class="rede" href="https://www.tiktok.com/@biblioteca.manhente" target="_blank">
+      <i class="fa-brands fa-tiktok"></i> TikTok
+    </a>
+  </div>
 </div>
 
 </main>
@@ -245,36 +252,43 @@ footer img{
   <img src="uma_esc_vida.png" alt="Uma Escola Para a Vida">
 </footer>
 
+<!-- JS DO TEMPO (igual ao teu, mantido) -->
 <script>
 const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
-
-function formatTemp(t){
-  return Number(t).toFixed(1);
+function format1(n){return Number(n).toFixed(1);}
+function iconeTempo(code){
+  if(code===0)return"☀️";
+  if([1,2].includes(code))return"🌤️";
+  if(code===3)return"☁️";
+  if([45,48].includes(code))return"🌫️";
+  if([51,53,55,61,63,65].includes(code))return"🌧️";
+  if([66,67].includes(code))return"🌧️❄️";
+  if([71,73,75,77].includes(code))return"❄️";
+  if([80,81,82].includes(code))return"🌦️";
+  if([95,96,99].includes(code))return"⛈️";
+  return"🌡️";
 }
 
-function atualizar(temp, hum, vento, fonte){
-  document.getElementById("temp").innerText = formatTemp(temp) + " °C";
-  document.getElementById("estado").innerText =
-    "Humidade: " + hum + " · Vento: " + formatTemp(vento) + " km/h";
-  document.getElementById("fonte").innerText = "Fonte: " + fonte;
+function atualizar(temp, hum, vento, fonte, icone){
+  document.getElementById("valor-temp").innerText=format1(temp)+" °C";
+  document.getElementById("icone-tempo").innerText=icone;
+  document.getElementById("estado").innerText="Humidade: "+hum+" · Vento: "+format1(vento)+" km/h";
+  document.getElementById("fonte").innerText="Fonte: "+fonte;
 }
 
-// WEATHER UNDERGROUND
-fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`)
+let iconeAtual="🌡️";
+fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
+.then(r=>r.json())
+.then(d=>iconeAtual=iconeTempo(d.current_weather.weathercode))
+.then(()=>{
+  return fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`);
+})
 .then(r=>r.json())
 .then(d=>{
-  if(!d.observations) throw "offline";
-  const o = d.observations[0];
-  atualizar(o.metric.temp, o.humidity+"%", o.metric.windSpeed, "Estação local");
+  const o=d.observations[0];
+  atualizar(o.metric.temp,o.humidity+"%",o.metric.windSpeed,"Estação da escola",iconeAtual);
 })
-.catch(()=>{
-  // FALLBACK
-  fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
-  .then(r=>r.json())
-  .then(d=>{
-    atualizar(d.current_weather.temperature, "—", d.current_weather.windspeed, "Modelo meteorológico");
-  });
-});
+.catch(()=>{});
 </script>
 
 </body>

@@ -51,6 +51,19 @@ main{
   box-shadow:0 12px 30px rgba(0,0,0,.2);
 }
 
+/* TEMP + ÍCONE */
+#linha-temp{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+
+#icone-atual{
+  font-size:2.2em;
+  line-height:1;
+}
+
 #temp{
   font-size:3.2em;
   font-weight:700;
@@ -160,11 +173,11 @@ footer{
     <div>
       <h1>Tempo Meteorológico</h1>
       <p>
-  <a href="index.html" style="color:white; text-decoration:underline;">
-    EB de Manhente
-  </a>
-  · Barcelos
-</p>
+        <a href="index.html" style="color:white; text-decoration:underline;">
+          EB de Manhente
+        </a>
+        · Barcelos
+      </p>
     </div>
   </div>
 </header>
@@ -172,7 +185,10 @@ footer{
 <main>
 
 <div id="cartao-clima">
-  <div id="temp">A carregar…</div>
+  <div id="linha-temp">
+    <div id="icone-atual">⛅</div>
+    <div id="temp">A carregar…</div>
+  </div>
   <div id="dados"></div>
   <div id="hora"></div>
   <div id="fonte"></div>
@@ -225,7 +241,12 @@ footer{
 <script>
 const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
 
-// ÍCONES
+// 1 casa decimal
+function format1(n){
+  return Number(n).toFixed(1);
+}
+
+// ÍCONES (Open-Meteo weathercode)
 function iconeTempo(code){
   if(code===0)return"☀️";
   if([1,2].includes(code))return"🌤️";
@@ -246,28 +267,45 @@ function sensor(nome, valor, unidade=""){
 }
 
 // UI ATUAL
-function atualizarAtual(temp, hum, vento, fonte){
-  document.getElementById("temp").innerText=temp+"°C";
-  document.getElementById("dados").innerText=`Humidade: ${hum} · Vento: ${vento} km/h`;
-  document.getElementById("hora").innerText=
+function atualizarAtual(temp, hum, vento, fonte, icone){
+  document.getElementById("temp").innerText = format1(temp) + "°C";
+  document.getElementById("icone-atual").innerText = icone || "🌡️";
+  document.getElementById("dados").innerText =
+    `Humidade: ${hum} · Vento: ${format1(vento)} km/h`;
+  document.getElementById("hora").innerText =
     "Atualizado: "+new Date().toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"});
-  document.getElementById("fonte").innerText="Fonte: "+fonte;
+  document.getElementById("fonte").innerText = "Fonte: " + fonte;
 }
 
-// WEATHER UNDERGROUND
-fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`)
+// Buscar ícone (estado do tempo) no Open-Meteo (só para o ícone)
+let iconeAtual = "🌡️";
+const iconePromise = fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
+  .then(r=>r.json())
+  .then(d=>{ iconeAtual = iconeTempo(d.current_weather.weathercode); })
+  .catch(()=>{ iconeAtual = "🌡️"; });
+
+// WEATHER UNDERGROUND (estação local)
+Promise.all([iconePromise]).then(()=>{
+  return fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`);
+})
 .then(r=>r.json())
 .then(d=>{
   if(!d.observations) throw "offline";
   const o=d.observations[0];
 
-  atualizarAtual(o.metric.temp, o.humidity+"%", o.metric.windSpeed, "Estação local");
+  atualizarAtual(
+    o.metric.temp,
+    o.humidity+"%",
+    o.metric.windSpeed,
+    "Estação local",
+    iconeAtual
+  );
 
   document.getElementById("sensores-grid").innerHTML =
     sensor("Pressão", o.metric.pressure, " hPa") +
-    sensor("Sensação Térmica", o.metric.heatIndex, " °C") +
-    sensor("Ponto de Orvalho", o.metric.dewpt, " °C") +
-    sensor("Wind Chill", o.metric.windChill, " °C") +
+    sensor("Sensação Térmica", format1(o.metric.heatIndex), " °C") +
+    sensor("Ponto de Orvalho", format1(o.metric.dewpt), " °C") +
+    sensor("Wind Chill", format1(o.metric.windChill), " °C") +
     sensor("Índice UV", o.uv) +
     sensor("Radiação Solar", o.solarRadiation, " W/m²") +
     sensor("Visibilidade", o.metric.visibility, " km") +
@@ -275,10 +313,20 @@ fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&for
     sensor("Chuva acumulada", o.metric.precipTotal, " mm");
 })
 .catch(()=>{
+  // FALLBACK (Open-Meteo total)
   fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
   .then(r=>r.json())
   .then(d=>{
-    atualizarAtual(d.current_weather.temperature,"—",d.current_weather.windspeed,"Modelo meteorológico");
+    atualizarAtual(
+      d.current_weather.temperature,
+      "—",
+      d.current_weather.windspeed,
+      "Modelo meteorológico",
+      iconeTempo(d.current_weather.weathercode)
+    );
+    // sensores ficam vazios no fallback
+    document.getElementById("sensores-grid").innerHTML =
+      `<div class="sensor"><strong>Sensores</strong><br>Indisponíveis (estação offline)</div>`;
   });
 });
 
@@ -288,7 +336,7 @@ fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151
 .then(d=>{
   document.getElementById("pressao").innerText=d.current.surface_pressure+" hPa";
   document.getElementById("uv").innerText=d.daily.uv_index_max[0];
-  document.getElementById("rajadas").innerText=d.current.wind_gusts_10m+" km/h";
+  document.getElementById("rajadas").innerText=format1(d.current.wind_gusts_10m)+" km/h";
 
   const dias=document.getElementById("dias");
   dias.innerHTML="";
@@ -297,8 +345,8 @@ fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151
       <div class="dia">
         <div class="icone">${iconeTempo(d.daily.weathercode[i])}</div>
         <strong>${new Date(dia).toLocaleDateString("pt-PT",{weekday:"short"})}</strong><br>
-        Máx: ${d.daily.temperature_2m_max[i]}°C<br>
-        Mín: ${d.daily.temperature_2m_min[i]}°C<br>
+        Máx: ${format1(d.daily.temperature_2m_max[i])}°C<br>
+        Mín: ${format1(d.daily.temperature_2m_min[i])}°C<br>
         Chuva: ${d.daily.precipitation_probability_max[i]}%
       </div>`;
   });
