@@ -22,7 +22,6 @@ header{
   color:white;
   padding:30px 20px;
 }
-
 .header-content{
   max-width:1100px;
   margin:auto;
@@ -30,7 +29,6 @@ header{
   align-items:center;
   gap:20px;
 }
-
 .header-content img{
   width:80px;
   background:white;
@@ -44,13 +42,11 @@ main{
   margin:40px auto;
   padding:0 20px;
 }
-
 .grid{
   display:grid;
   grid-template-columns:2fr 1fr;
   gap:30px;
 }
-
 section{
   background:white;
   border-radius:16px;
@@ -58,12 +54,11 @@ section{
   box-shadow:0 6px 18px rgba(0,0,0,.08);
 }
 
-/* SOBRE – Ler mais (animação suave) */
+/* SOBRE – Ler mais (abertura suave) */
 .sobre-intro{
   font-size:1.05em;
   line-height:1.6;
 }
-
 .ler-mais{
   margin-top:6px;
   padding:10px 14px;
@@ -75,42 +70,35 @@ section{
   cursor:pointer;
   transition:.2s;
 }
-
 .ler-mais:hover{
   background:#bbf7d0;
   transform:translateY(-1px);
 }
-
 .sobre-detalhe{
   overflow:hidden;
   max-height:0;
   opacity:0;
-  transition:max-height .5s ease, opacity .4s ease;
+  transition:max-height .55s ease, opacity .35s ease;
   margin-top:10px;
 }
-
 .sobre-detalhe.aberto{
-  max-height:1200px; /* suficiente para o conteúdo */
+  max-height:2000px;
   opacity:1;
 }
-
 .sobre-caixa{
-  margin:10px 0 14px;
+  margin:12px 0 14px;
   padding:15px;
   background:#f0fdf4;
   border-left:4px solid #16a34a;
   border-radius:8px;
 }
-
 .sobre-lista{
   columns:2;
   margin-top:8px;
 }
-
 @media (max-width:560px){
   .sobre-lista{columns:1;}
 }
-
 .sobre-separador{
   margin:25px 0;
   border:none;
@@ -125,8 +113,7 @@ section{
   padding:20px;
   text-align:center;
 }
-
-#temp{
+#linha-temp{
   font-size:2.4em;
   font-weight:700;
   display:flex;
@@ -134,10 +121,20 @@ section{
   justify-content:center;
   gap:10px;
 }
-
-#icone-tempo{font-size:1.2em;}
-#estado,#fonte{font-size:.9em;margin-top:6px;}
-
+#icone-tempo{
+  font-size:1.9em;
+  line-height:1;
+  margin-top:6px; /* por baixo da temperatura */
+}
+#dados-tempo{
+  font-size:.9em;
+  margin-top:10px;
+}
+#fonte{
+  font-size:.8em;
+  margin-top:6px;
+  opacity:.95;
+}
 #tempo-mini a{
   display:inline-block;
   margin-top:10px;
@@ -152,7 +149,6 @@ section{
   display:grid;
   gap:12px;
 }
-
 .botao{
   padding:14px;
   border-radius:12px;
@@ -165,7 +161,6 @@ section{
   gap:10px;
   transition:.2s;
 }
-
 .botao i{font-size:1.1em;}
 .botao:hover{transform:translateY(-3px);}
 
@@ -181,14 +176,64 @@ section{
   padding:2px 6px;
 }
 
+/* BEMA (cores alinhadas + animação discreta) */
+.bema{
+  background:linear-gradient(135deg,#fff7cc,#fde68a);
+  color:#14532d;
+  border:1px solid #86efac;
+  box-shadow:0 6px 18px rgba(0,0,0,.10);
+  cursor:default;
+}
+.bema:hover{ transform:none; }
+
+.icon-bema{
+  height:34px;
+  width:auto;
+  background:rgba(255,255,255,.8);
+  border-radius:10px;
+  padding:6px 10px;
+}
+
+.texto-bema{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  line-height:1.15;
+}
+.texto-bema small{
+  font-weight:600;
+  opacity:.9;
+}
+
+/* selo "Brevemente" */
+.bema-breve{
+  margin-top:6px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:#fee2e2;
+  color:#991b1b;
+  font-weight:800;
+  font-size:.78em;
+  letter-spacing:.2px;
+  border:1px solid #fecaca;
+  animation:pulseBreve 2.6s ease-in-out infinite;
+}
+.bema-breve i{ font-size:.95em; }
+
+@keyframes pulseBreve{
+  0%,100%{ transform:scale(1); opacity:.92; }
+  50%{ transform:scale(1.03); opacity:1; }
+}
+
 /* REDES */
 #redes{
   margin-top:40px;
   text-align:center;
 }
-
 #redes h3{color:#166534;}
-
 .redes-links{
   display:flex;
   justify-content:center;
@@ -196,7 +241,6 @@ section{
   gap:12px;
   margin-top:12px;
 }
-
 .rede{
   display:flex;
   align-items:center;
@@ -209,12 +253,24 @@ section{
   font-weight:600;
   transition:.2s;
 }
-
-.rede i{font-size:1.1em;}
-
 .rede:hover{
   background:#bbf7d0;
   transform:translateY(-2px);
+}
+
+/* CONTADOR DE VISITAS (A1) */
+.contador-visitas{
+  margin:14px auto 0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  font-weight:700;
+  color:#166534;
+  opacity:.92;
+}
+.contador-visitas img{
+  height:22px;
 }
 
 /* FOOTER */
@@ -222,7 +278,6 @@ footer{
   margin:40px 0 20px;
   text-align:center;
 }
-
 footer img{max-width:260px;}
 </style>
 </head>
@@ -243,121 +298,142 @@ footer img{max-width:260px;}
 
 <div class="grid">
 
-<section>
-  <h2>Sobre a Escola</h2>
+  <!-- APRESENTAÇÃO DA ESCOLA -->
+  <section>
+    <h2>Sobre a Escola</h2>
 
-  <p class="sobre-intro">
-    A <strong>Escola Básica de Manhente</strong> assegura a educação do
-    <strong>1.º ao 9.º ano</strong>, integrando o
-    <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
-  </p>
-
-  <p class="sobre-intro">
-    Acolhe alunos do <strong>1.º, 2.º e 3.º ciclos</strong>, garantindo a continuidade
-    do percurso educativo num único espaço.
-  </p>
-
-  <button class="ler-mais" id="btn-ler-mais" type="button" aria-expanded="false" aria-controls="sobre-detalhe">
-    Ler mais
-  </button>
-
-  <div id="sobre-detalhe" class="sobre-detalhe" aria-hidden="true">
-    <div class="sobre-caixa">
-      <strong>Localização e comunidade educativa</strong><br>
-      Situada na freguesia de <strong>Manhente</strong>, no concelho de <strong>Barcelos</strong>,
-      a EB de Manhente serve uma comunidade educativa alargada.
-    </div>
-
-    <p>Recebe alunos das freguesias de:</p>
-
-    <ul class="sobre-lista">
-      <li>Manhente</li>
-      <li>Galegos Santa Maria</li>
-      <li>Galegos São Martinho</li>
-      <li>Ucha</li>
-      <li>Areias de São Vicente</li>
-      <li>Lama</li>
-      <li>Oliveira</li>
-    </ul>
-
-    <p style="margin-top:15px;">
-      Em estreita articulação com as famílias e parceiros educativos,
-      a escola promove uma <strong>educação inclusiva</strong>,
-      orientada para o <strong>sucesso escolar</strong> e para o
-      <strong>desenvolvimento integral dos alunos</strong>.
+    <p class="sobre-intro">
+      A <strong>Escola Básica de Manhente</strong> é um estabelecimento de ensino que assegura a educação
+      do <strong>1.º ao 9.º ano de escolaridade</strong>, integrando o
+      <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
     </p>
-  </div>
 
-  <hr class="sobre-separador">
+    <p class="sobre-intro">
+      A escola acolhe alunos do <strong>1.º, 2.º e 3.º ciclos do ensino básico</strong>,
+      garantindo a continuidade do percurso educativo num único espaço.
+    </p>
 
-  <p>
-    <strong>📍 Morada:</strong><br>
-    Praceta Manuel Maria Barbosa du Bocage
-  </p>
+    <button class="ler-mais" id="btn-ler-mais" type="button" aria-expanded="false" aria-controls="sobre-detalhe">
+      Ler mais
+    </button>
 
-  <p>
-    <strong>📞 Telefone:</strong> 253 849 410<br>
-    <strong>✉️ Email:</strong> geral@aeaf.edu.pt
-  </p>
-</section>
+    <div id="sobre-detalhe" class="sobre-detalhe" aria-hidden="true">
+      <div class="sobre-caixa">
+        <strong>Localização e comunidade educativa</strong><br>
+        Localizada na freguesia de <strong>Manhente</strong>, no concelho de <strong>Barcelos</strong>,
+        a EB de Manhente serve uma comunidade educativa alargada, recebendo alunos das freguesias de
+        Manhente, Galegos Santa Maria, Galegos São Martinho, Ucha, Areias de São Vicente, Lama, Oliveira, entre outros.
+      </div>
 
-<div>
+      <p>Freguesias abrangidas (principais):</p>
+      <ul class="sobre-lista">
+        <li>Manhente</li>
+        <li>Galegos Santa Maria</li>
+        <li>Galegos São Martinho</li>
+        <li>Ucha</li>
+        <li>Areias de São Vicente</li>
+        <li>Lama</li>
+        <li>Oliveira</li>
+      </ul>
 
-  <div id="tempo-mini">
-    <div id="temp">
-      <span id="icone-tempo">⛅</span>
-      <span id="valor-temp">— °C</span>
+      <p style="margin-top:15px;">
+        Em estreita articulação com as famílias e parceiros educativos, a escola promove uma
+        <strong>educação inclusiva</strong>, orientada para o <strong>sucesso escolar</strong>,
+        o <strong>desenvolvimento integral dos alunos</strong> e a sua preparação para os desafios futuros.
+      </p>
     </div>
-    <div id="estado">A carregar…</div>
-    <div id="fonte"></div>
-    <a href="tempo.html">Ver página do tempo completo</a>
+
+    <hr class="sobre-separador">
+
+    <p><strong>📍 Morada:</strong><br>Praceta Manuel Maria Barbosa du Bocage</p>
+    <p><strong>📞 Telefone:</strong> 253 849 410<br>
+       <strong>✉️ Email:</strong> geral@aeaf.edu.pt</p>
+  </section>
+
+  <!-- COLUNA DIREITA -->
+  <div>
+
+    <!-- TEMPO -->
+    <div id="tempo-mini">
+      <div id="linha-temp">
+        <i class="fa-solid fa-temperature-half" aria-hidden="true"></i>
+        <span id="valor-temp">— °C</span>
+      </div>
+
+      <div id="icone-tempo">⛅</div>
+
+      <div id="dados-tempo">A carregar…</div>
+      <div id="fonte"></div>
+
+      <a href="tempo.html">Ver página do tempo completo</a>
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="botoes">
+      <a class="botao inovar"
+         href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx"
+         target="_blank" rel="noopener">
+        <i class="fa-solid fa-book"></i> INOVAR – Sumários
+      </a>
+
+      <a class="botao consulta"
+         href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login"
+         target="_blank" rel="noopener">
+        <i class="fa-solid fa-user-check"></i> INOVAR Consulta
+      </a>
+
+      <a class="botao sige"
+         href="https://inovar.aeaf.edu.pt/inovarsige/"
+         target="_blank" rel="noopener">
+        <i class="fa-solid fa-credit-card"></i> INOVAR SIGE – Cartão
+      </a>
+
+      <a class="botao aeaf"
+         href="https://aeaf.edu.pt"
+         target="_blank" rel="noopener">
+        <img src="logoESAF-300x200.jpg" class="icon-aeaf" alt="AEAF">
+        Agrupamento AEAF
+      </a>
+
+      <!-- BEMA (brevemente) -->
+      <div class="botao bema" aria-disabled="true" title="Brevemente">
+        <img src="BEMA.png" class="icon-bema" alt="BEMA - Biblioteca Escolar de Manhente">
+        <div class="texto-bema">
+          Biblioteca Escolar de Manhente
+          <small class="bema-breve"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> Brevemente</small>
+        </div>
+      </div>
+    </div>
+
   </div>
-
-  <div class="botoes">
-    <a class="botao inovar"
-       href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx"
-       target="_blank" rel="noopener">
-      <i class="fa-solid fa-book"></i> INOVAR – Sumários
-    </a>
-
-    <a class="botao consulta"
-       href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login"
-       target="_blank" rel="noopener">
-      <i class="fa-solid fa-user-check"></i> INOVAR Consulta
-    </a>
-
-    <a class="botao sige"
-       href="https://inovar.aeaf.edu.pt/inovarsige/"
-       target="_blank" rel="noopener">
-      <i class="fa-solid fa-credit-card"></i> INOVAR SIGE – Cartão
-    </a>
-
-    <a class="botao aeaf"
-       href="https://aeaf.edu.pt"
-       target="_blank" rel="noopener">
-      <img src="logoESAF-300x200.jpg" class="icon-aeaf" alt="AEAF">
-      Agrupamento AEAF
-    </a>
-  </div>
-
-</div>
 </div>
 
+<!-- REDES -->
 <div id="redes">
   <h3>Redes Sociais</h3>
   <div class="redes-links">
     <a class="rede" href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank" rel="noopener">
-      <i class="fa-brands fa-facebook-f"></i> Facebook Escola
+      <i class="fa-brands fa-facebook-f" aria-hidden="true"></i> Facebook Escola
     </a>
     <a class="rede" href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank" rel="noopener">
-      <i class="fa-brands fa-facebook"></i> Facebook Biblioteca
+      <i class="fa-brands fa-facebook" aria-hidden="true"></i> Facebook Biblioteca
     </a>
     <a class="rede" href="https://www.instagram.com/bibliotecademanhente/" target="_blank" rel="noopener">
-      <i class="fa-brands fa-instagram"></i> Instagram
+      <i class="fa-brands fa-instagram" aria-hidden="true"></i> Instagram
     </a>
     <a class="rede" href="https://www.tiktok.com/@biblioteca.manhente" target="_blank" rel="noopener">
-      <i class="fa-brands fa-tiktok"></i> TikTok
+      <i class="fa-brands fa-tiktok" aria-hidden="true"></i> TikTok
     </a>
+  </div>
+
+  <!-- CONTADOR DE VISITAS (A1) -->
+  <div class="contador-visitas" title="Contador de visitas ao site">
+    <span>Visitas:</span>
+    <img
+      src="https://visitorbadge.io/api/visitors?path=jmmsantos-lang.github.io%2Fbema%2F&label=&countColor=%23166534"
+      alt="contador de visitas"
+      loading="lazy"
+    >
   </div>
 </div>
 
@@ -370,7 +446,7 @@ footer img{max-width:260px;}
 <script>
 /* =========================
    LER MAIS / LER MENOS
-   (animação suave + scroll)
+   (abertura suave + scroll)
    ========================= */
 const btn = document.getElementById("btn-ler-mais");
 const detalhe = document.getElementById("sobre-detalhe");
@@ -384,7 +460,6 @@ if (btn && detalhe) {
     btn.setAttribute("aria-expanded", String(!aberto));
     detalhe.setAttribute("aria-hidden", String(aberto));
 
-    // quando abre, faz scroll suave para o início do bloco
     if (!aberto) {
       setTimeout(() => {
         detalhe.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -395,6 +470,8 @@ if (btn && detalhe) {
 
 /* =========================
    TEMPO (WU + Open-Meteo)
+   - Termómetro + temperatura
+   - Ícone por baixo
    ========================= */
 const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
 
@@ -402,7 +479,6 @@ function format1(n){
   return Number(n).toFixed(1);
 }
 
-// Ícones (Open-Meteo weathercode)
 function iconeTempo(code){
   if(code === 0) return "☀️";
   if([1,2].includes(code)) return "🌤️";
@@ -416,24 +492,26 @@ function iconeTempo(code){
   return "🌡️";
 }
 
-function atualizar(temp, hum, vento, fonte, icone){
+function atualizarTempo(temp, hum, vento, fonte){
   document.getElementById("valor-temp").innerText = format1(temp) + " °C";
-  document.getElementById("icone-tempo").innerText = icone || "🌡️";
-  document.getElementById("estado").innerText =
+  document.getElementById("dados-tempo").innerText =
     "Humidade: " + hum + " · Vento: " + format1(vento) + " km/h";
   document.getElementById("fonte").innerText = "Fonte: " + fonte;
 }
 
-// 1) Buscar ícone (estado do tempo) no Open-Meteo
-let iconeAtual = "🌡️";
+let iconeAtual = "⛅";
 const iconePromise = fetch(
   "https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon"
 )
 .then(r => r.json())
-.then(d => { iconeAtual = iconeTempo(d.current_weather.weathercode); })
-.catch(() => { iconeAtual = "🌡️"; });
+.then(d => {
+  iconeAtual = iconeTempo(d.current_weather.weathercode);
+  document.getElementById("icone-tempo").innerText = iconeAtual;
+})
+.catch(() => {
+  document.getElementById("icone-tempo").innerText = "🌡️";
+});
 
-// 2) Buscar dados da estação no WU (temperatura real)
 Promise.all([iconePromise])
 .then(() => {
   return fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`);
@@ -443,31 +521,29 @@ Promise.all([iconePromise])
   if(!d.observations) throw "offline";
   const o = d.observations[0];
 
-  atualizar(
+  atualizarTempo(
     o.metric.temp,
     o.humidity + "%",
     o.metric.windSpeed,
-    "Estação da escola",
-    iconeAtual
+    "Estação da escola"
   );
 })
 .catch(() => {
-  // Fallback total: tudo Open-Meteo (inclui ícone)
   fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
   .then(r => r.json())
   .then(d => {
-    atualizar(
+    document.getElementById("icone-tempo").innerText = iconeTempo(d.current_weather.weathercode);
+    atualizarTempo(
       d.current_weather.temperature,
       "—",
       d.current_weather.windspeed,
-      "Modelo meteorológico",
-      iconeTempo(d.current_weather.weathercode)
+      "Modelo meteorológico"
     );
   })
   .catch(() => {
     document.getElementById("valor-temp").innerText = "— °C";
     document.getElementById("icone-tempo").innerText = "🌡️";
-    document.getElementById("estado").innerText = "Dados indisponíveis";
+    document.getElementById("dados-tempo").innerText = "Dados indisponíveis";
     document.getElementById("fonte").innerText = "";
   });
 });
