@@ -122,9 +122,8 @@ section{
   gap:10px;
 }
 #icone-tempo{
-  font-size:1.9em;
+  font-size:1.1em; /* emoji */
   line-height:1;
-  margin-top:6px;
 }
 #dados-tempo{
   font-size:.9em;
@@ -264,6 +263,13 @@ footer{
   text-align:center;
 }
 footer img{max-width:260px;}
+
+#estado-tempo{
+  margin-top:6px;
+  font-size:1em;
+  font-weight:600;
+  opacity:.95;
+}
 </style>
 
 <script async
@@ -346,18 +352,18 @@ footer img{max-width:260px;}
 
     <!-- TEMPO -->
     <div id="tempo-mini">
-      <div id="linha-temp">
-        <i class="fa-solid fa-temperature-half" aria-hidden="true"></i>
-        <span id="valor-temp">— °C</span>
-      </div>
-
-      <div id="icone-tempo">⛅</div>
-
-      <div id="dados-tempo">A carregar…</div>
-      <div id="fonte"></div>
-
-      <a href="tempo.html">Ver página do tempo completo</a>
+    <div id="linha-temp">
+      <i class="fa-solid fa-temperature-half" aria-hidden="true"></i>
+      <span id="valor-temp">— °C</span>
+      <span id="icone-tempo">⛅</span>
     </div>
+
+    <div id="estado-tempo">A carregar…</div>
+    <div id="dados-tempo"></div>
+    <div id="fonte"></div>
+
+    <a href="tempo.html">Ver página do tempo completo</a>
+  </div>
 
     <!-- BOTÕES -->
     <div class="botoes">
@@ -451,15 +457,13 @@ if (btn && detalhe) {
 
 /* =========================
    TEMPO (WU + Open-Meteo)
-   - Termómetro + temperatura
-   - Ícone por baixo
+   - Emoji do estado do tempo + texto por baixo
    ========================= */
 const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
 
-function format1(n){
-  return Number(n).toFixed(1);
-}
+function format1(n){ return Number(n).toFixed(1); }
 
+// Emoji do tempo (Open-Meteo weathercode)
 function iconeTempo(code){
   if(code === 0) return "☀️";
   if([1,2].includes(code)) return "🌤️";
@@ -473,27 +477,50 @@ function iconeTempo(code){
   return "🌡️";
 }
 
-function atualizarTempo(temp, hum, vento, fonte){
+// Texto do estado do tempo (PT)
+function descricaoTempo(code){
+  if(code === 0) return "Céu limpo";
+  if([1,2].includes(code)) return "Parcialmente nublado";
+  if(code === 3) return "Nublado";
+  if([45,48].includes(code)) return "Nevoeiro";
+  if([51,53,55].includes(code)) return "Chuvisco";
+  if([61,63,65].includes(code)) return "Chuva";
+  if([66,67].includes(code)) return "Chuva gelada";
+  if([71,73,75,77].includes(code)) return "Neve";
+  if([80,81,82].includes(code)) return "Aguaceiros";
+  if([95,96,99].includes(code)) return "Trovoada";
+  return "Estado do tempo";
+}
+
+function atualizarUI(temp, hum, vento, fonte, icone, estado){
   document.getElementById("valor-temp").innerText = format1(temp) + " °C";
+  document.getElementById("icone-tempo").innerText = icone || "⛅";
+  document.getElementById("estado-tempo").innerText = estado || "—";
   document.getElementById("dados-tempo").innerText =
     "Humidade: " + hum + " · Vento: " + format1(vento) + " km/h";
   document.getElementById("fonte").innerText = "Fonte: " + fonte;
 }
 
+// 1) Open-Meteo → ícone + estado (texto)
 let iconeAtual = "⛅";
-const iconePromise = fetch(
+let estadoAtual = "A carregar…";
+
+const meteoPromise = fetch(
   "https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon"
 )
 .then(r => r.json())
 .then(d => {
-  iconeAtual = iconeTempo(d.current_weather.weathercode);
-  document.getElementById("icone-tempo").innerText = iconeAtual;
+  const code = d.current_weather.weathercode;
+  iconeAtual = iconeTempo(code);
+  estadoAtual = descricaoTempo(code);
 })
 .catch(() => {
-  document.getElementById("icone-tempo").innerText = "🌡️";
+  iconeAtual = "🌡️";
+  estadoAtual = "Dados indisponíveis";
 });
 
-Promise.all([iconePromise])
+// 2) Weather Underground → temperatura real + humidade + vento
+Promise.all([meteoPromise])
 .then(() => {
   return fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`);
 })
@@ -502,29 +529,35 @@ Promise.all([iconePromise])
   if(!d.observations) throw "offline";
   const o = d.observations[0];
 
-  atualizarTempo(
+  atualizarUI(
     o.metric.temp,
     o.humidity + "%",
     o.metric.windSpeed,
-    "Estação da escola"
+    "Estação da escola",
+    iconeAtual,
+    estadoAtual
   );
 })
 .catch(() => {
+  // fallback total Open-Meteo
   fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
   .then(r => r.json())
   .then(d => {
-    document.getElementById("icone-tempo").innerText = iconeTempo(d.current_weather.weathercode);
-    atualizarTempo(
+    const code = d.current_weather.weathercode;
+    atualizarUI(
       d.current_weather.temperature,
       "—",
       d.current_weather.windspeed,
-      "Modelo meteorológico"
+      "Modelo meteorológico",
+      iconeTempo(code),
+      descricaoTempo(code)
     );
   })
   .catch(() => {
     document.getElementById("valor-temp").innerText = "— °C";
     document.getElementById("icone-tempo").innerText = "🌡️";
-    document.getElementById("dados-tempo").innerText = "Dados indisponíveis";
+    document.getElementById("estado-tempo").innerText = "Dados indisponíveis";
+    document.getElementById("dados-tempo").innerText = "";
     document.getElementById("fonte").innerText = "";
   });
 });
