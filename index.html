@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escola Básica de Manhente</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Montserrat',sans-serif;
+  background:#f0fdf4;
+  color:#1f2933;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#166534,#15803d);
+  color:white;
+  padding:30px 20px;
+}
+
+.header-content{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.header-content img{
+  width:80px;
+  background:white;
+  border-radius:50%;
+  padding:6px;
+}
+
+/* MAIN */
+main{
+  max-width:1100px;
+  margin:40px auto;
+  padding:0 20px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:30px;
+}
+
+section{
+  background:white;
+  border-radius:16px;
+  padding:25px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+/* TEMPO MINI */
+#tempo-mini{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:white;
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+}
+
+#temp{
+  font-size:2.4em;
+  font-weight:700;
+}
+
+#estado,#fonte{
+  font-size:.9em;
+  margin-top:6px;
+}
+
+#tempo-mini a{
+  display:inline-block;
+  margin-top:10px;
+  color:white;
+  text-decoration:underline;
+  font-size:.9em;
+}
+
+/* BOTÕES EXTERNOS */
+.botoes{
+  margin-top:25px;
+  display:grid;
+  gap:12px;
+}
+
+.botao{
+  padding:14px;
+  border-radius:12px;
+  text-decoration:none;
+  color:white;
+  font-weight:600;
+  text-align:center;
+  transition:.2s;
+}
+
+.botao:hover{transform:translateY(-3px);}
+
+.inovar{background:linear-gradient(135deg,#16a34a,#166534);}
+.sige{background:linear-gradient(135deg,#4ade80,#15803d);}
+.consulta{background:linear-gradient(135deg,#22c55e,#16a34a);}
+.aeaf{background:linear-gradient(135deg,#22c55e,#14532d);}
+
+/* REDES */
+#redes{
+  margin-top:40px;
+  text-align:center;
+}
+
+#redes h3{color:#166534;}
+
+#redes a{
+  display:inline-block;
+  margin:8px 12px;
+  padding:10px 14px;
+  border-radius:20px;
+  text-decoration:none;
+  font-weight:600;
+  color:#166534;
+  background:#dcfce7;
+}
+
+#redes a:hover{background:#bbf7d0;}
+
+/* FOOTER */
+footer{
+  margin:40px 0 20px;
+  text-align:center;
+}
+
+footer img{
+  max-width:260px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-content">
+    <img src="logo-eb-manhente.png" alt="EB de Manhente">
+    <div>
+      <h1>Escola Básica de Manhente</h1>
+      <p>Barcelos</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<div class="grid">
+
+  <!-- COLUNA ESQUERDA -->
+  <section>
+    <h2>Sobre a Escola</h2>
+    <p>
+      A Escola Básica de Manhente integra o Agrupamento de Escolas Alcaides de Faria,
+      promovendo uma educação de qualidade, próxima da comunidade.
+    </p>
+
+    <p>
+      <strong>Morada:</strong><br>
+      Praceta Manuel Maria Barbosa du Bocage
+    </p>
+
+    <p>
+      <strong>Telefone:</strong> 253 849 410<br>
+      <strong>Email:</strong> geral@aeaf.edu.pt
+    </p>
+  </section>
+
+  <!-- COLUNA DIREITA -->
+  <div>
+
+    <!-- TEMPO MINI -->
+    <div id="tempo-mini">
+      <div id="temp">— °C</div>
+      <div id="estado"></div>
+      <div id="fonte"></div>
+      <a href="tempo.html">Ver página do tempo completo</a>
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="botoes">
+      <a class="botao inovar"
+         href="https://inovar.aeaf.edu.pt/inovaralunos/Inicial.wgx"
+         target="_blank">
+        INOVAR – Sumários
+      </a>
+
+      <a class="botao consulta"
+         href="https://inovar.aeaf.edu.pt/inovarconsulta/app/index.html#/login"
+         target="_blank">
+        INOVAR Consulta
+      </a>
+
+      <a class="botao sige"
+         href="https://inovar.aeaf.edu.pt/inovarsige/"
+         target="_blank">
+        INOVAR SIGE – Cartão
+      </a>
+
+      <a class="botao aeaf"
+         href="https://aeaf.edu.pt"
+         target="_blank">
+        Agrupamento AEAF
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- REDES -->
+<div id="redes">
+  <h3>Redes Sociais</h3>
+
+  <a href="https://www.facebook.com/profile.php?id=100057106044171" target="_blank">
+    Facebook Escola
+  </a>
+
+  <a href="https://www.facebook.com/bibliotecas.agrupamentodemanhente/" target="_blank">
+    Facebook Biblioteca
+  </a>
+
+  <a href="https://www.instagram.com/bibliotecademanhente/" target="_blank">
+    Instagram
+  </a>
+
+  <a href="https://www.tiktok.com/@biblioteca.manhente" target="_blank">
+    TikTok
+  </a>
+</div>
+
+</main>
+
+<footer>
+  <img src="uma_esc_vida.png" alt="Uma Escola Para a Vida">
+</footer>
+
+<script>
+const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
+
+function formatTemp(t){
+  return Number(t).toFixed(1);
+}
+
+function atualizar(temp, hum, vento, fonte){
+  document.getElementById("temp").innerText = formatTemp(temp) + " °C";
+  document.getElementById("estado").innerText =
+    "Humidade: " + hum + " · Vento: " + formatTemp(vento) + " km/h";
+  document.getElementById("fonte").innerText = "Fonte: " + fonte;
+}
+
+// WEATHER UNDERGROUND
+fetch(`https://api.weather.com/v2/pws/observations/current?stationId=IMANHE1&format=json&units=m&apiKey=${apiKey}`)
+.then(r=>r.json())
+.then(d=>{
+  if(!d.observations) throw "offline";
+  const o = d.observations[0];
+  atualizar(o.metric.temp, o.humidity+"%", o.metric.windSpeed, "Estação local");
+})
+.catch(()=>{
+  // FALLBACK
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151&current_weather=true&timezone=Europe/Lisbon")
+  .then(r=>r.json())
+  .then(d=>{
+    atualizar(d.current_weather.temperature, "—", d.current_weather.windspeed, "Modelo meteorológico");
+  });
+});
+</script>
+
+</body>
+</html>
