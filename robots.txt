@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ebmanhente.github.io/ebm/sitemap.xml
