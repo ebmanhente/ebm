@@ -314,60 +314,50 @@ footer img{max-width:260px;}
 
 
 /* =========================
-   RESPONSIVO (portrait-first)
+   MOBILE COMPACTO (menos altura)
    ========================= */
-
-/* Evitar “saltos” de layout em ecrãs estreitos */
-html{ -webkit-text-size-adjust:100%; }
-
-/* A partir de tablets/telemóvel: 1 coluna */
-@media (max-width: 920px){
-  main{ margin:24px auto; }
-  .grid{ grid-template-columns:1fr; gap:16px; }
-}
-
-/* Telemóvel (portrait): header e cartões mais confortáveis */
 @media (max-width: 600px){
-  header{ padding:20px 14px; }
-  .header-content{
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    gap:12px;
+  main{ margin:18px auto; padding:0 14px; }
+  section{ padding:16px; }
+
+  /* Reduzir introdução (evita scroll enorme) */
+  .sobre-intro{ font-size:1em; }
+  .sobre-intro-2{ display:none; } /* no telemóvel fica mais curto */
+
+  /* Coluna direita: cartão do tempo mais compacto */
+  #tempo-mini{ padding:18px; border-radius:16px; }
+  #linha-temp{ font-size:2.05em; }
+
+  /* Botões: 2 colunas para ocupar menos altura */
+  .botoes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
   }
-  .header-content img{ width:72px; }
-
-  main{ padding:0 14px; }
-  section{ padding:18px; border-radius:14px; }
-
-  h1{ margin:0; font-size:clamp(1.35rem, 5.2vw, 1.65rem); line-height:1.15; }
-  header p{ margin:6px 0 0; opacity:.95; }
-}
-
-/* Tempo: impedir que “rebente” no portrait */
-@media (max-width: 430px){
-  #linha-temp{
-    font-size:clamp(1.85rem, 9vw, 2.15rem);
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  #valor-temp{ white-space:nowrap; }
-  #dados-tempo{ font-size:.9em; }
-  .logo-tempo{ max-width:92px; }
-}
-
-/* Botões: área de toque + alinhamento consistente */
-@media (max-width: 600px){
-  .botoes{ gap:10px; }
   .botao{
-    padding:16px 14px;
+    padding:12px 10px;
     border-radius:14px;
+    justify-content:center;
+    text-align:center;
+    font-size:.95em;
+    line-height:1.1;
+    min-height:56px;
   }
+  .botao i{ font-size:1.15em; }
+  .icon-aeaf{ height:20px; padding:2px 5px; }
+
+  /* BEMA ocupa as 2 colunas */
+  .bema{ grid-column:1 / -1; }
+  .icon-bema{ height:30px; padding:6px 10px; }
+
+  /* Redes mais compactas */
+  .rede{ padding:10px 12px; font-size:.95em; }
 }
 
-/* Redes: chips mais compactos no mobile */
-@media (max-width: 600px){
-  .rede{ font-size:.95em; padding:10px 12px; }
+/* Muito pequeno: volta a 1 coluna quando não cabe */
+@media (max-width: 380px){
+  .botoes{ grid-template-columns:1fr; }
+  .botao{ justify-content:flex-start; text-align:left; padding:14px; }
 }
 
 </style>
@@ -405,7 +395,7 @@ html{ -webkit-text-size-adjust:100%; }
       <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
     </p>
 
-    <p class="sobre-intro">
+    <p class="sobre-intro sobre-intro-2">
       A escola acolhe alunos do <strong>1.º, 2.º e 3.º ciclos do ensino básico</strong>,
       garantindo a continuidade do percurso educativo num único espaço.
     </p>
