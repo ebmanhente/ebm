@@ -266,6 +266,20 @@ details summary::marker {
 
 </div>
 
+<div id="rosa-dos-ventos" style="margin-top:40px;">
+  <h2>Rosa dos Ventos (hoje)</h2>
+  <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
+    <div style="width:260px; max-width:90vw;">
+      <svg id="windrose" viewBox="0 0 200 200" style="width:100%; height:auto; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px;"></svg>
+      <div style="margin-top:8px; font-size:.85em; color:#475569;">Baseado nas observações da estação (últimas 24h, filtradas para hoje).</div>
+    </div>
+    <div style="min-width:240px; flex:1;">
+      <div style="font-size:.9em; color:#0f172a;"><strong>Distribuição por direção</strong></div>
+      <div id="windrose-legend" style="margin-top:10px; display:grid; grid-template-columns:repeat(2, minmax(120px,1fr)); gap:8px;"></div>
+    </div>
+  </div>
+</div>
+
 <details>
   <summary><strong>Sensores da estação local</strong></summary>
   <div id="sensores">
@@ -500,6 +514,300 @@ fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=41.5388&lo
     setAQ("aq-estado", "Indisponível");
     setAQ("aq-hora", fmtHoraCurta(new Date()));
   });
+
+
+
+// =======================
+// VENTO DO DIA + ROSA DOS VENTOS (a partir do histórico rápido 1 dia)
+// Endpoint usado: https://api.weather.com/v2/pws/observations/all/1day
+// =======================
+function safeNum(x){
+  const n = Number(x);
+  return Number.isNaN(n) ? null : n;
+}
+function pad2(n){ return String(n).padStart(2,"0"); }
+function todayYMD(){
+  const d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+}
+function sector8(deg){
+  const dirs = ["N","NE","E","SE","S","SW","W","NW"];
+  if(deg===null || deg===undefined) return null;
+  let a = ((deg % 360) + 360) % 360;
+  const i = Math.floor((a + 22.5) / 45) % 8;
+  return {i, label: dirs[i]};
+}
+function renderWindRose(counts){
+  const svg = document.getElementById("windrose");
+  if(!svg) return;
+  svg.innerHTML = "";
+  const cx=100, cy=100;
+  const NS="http://www.w3.org/2000/svg";
+  // circles
+  [20,40,60,80].forEach(r=>{
+    const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r);
+    c.setAttribute("fill","none"); c.setAttribute("stroke","#e2e8f0");
+    svg.appendChild(c);
+  });
+  // labels N/E/S/W
+  [{t:"N",x:100,y:14},{t:"E",x:186,y:104},{t:"S",x:100,y:196},{t:"W",x:14,y:104}].forEach(L=>{
+    const tx=document.createElementNS(NS,"text");
+    tx.textContent=L.t;
+    tx.setAttribute("x",L.x); tx.setAttribute("y",L.y);
+    tx.setAttribute("text-anchor","middle");
+    tx.setAttribute("font-size","12");
+    tx.setAttribute("fill","#334155");
+    svg.appendChild(tx);
+  });
+
+  const maxCount = Math.max(...counts, 0);
+  const maxBar = 80;
+
+  for(let i=0;i<8;i++){
+    const count = counts[i] || 0;
+    const len = maxCount>0 ? (count/maxCount)*maxBar : 0;
+    const angle = (-90 + i*45) * Math.PI/180;
+    const x2 = cx + Math.cos(angle)*len;
+    const y2 = cy + Math.sin(angle)*len;
+
+    const line=document.createElementNS(NS,"line");
+    line.setAttribute("x1",cx); line.setAttribute("y1",cy);
+    line.setAttribute("x2",x2); line.setAttribute("y2",y2);
+    line.setAttribute("stroke","#0f172a");
+    line.setAttribute("stroke-width","6");
+    line.setAttribute("stroke-linecap","round");
+    svg.appendChild(line);
+  }
+}
+function renderWindRoseLegend(counts){
+  const wrap=document.getElementById("windrose-legend");
+  if(!wrap) return;
+  const dirs=["N","NE","E","SE","S","SW","W","NW"];
+  wrap.innerHTML="";
+  dirs.forEach((d,i)=>{
+    const div=document.createElement("div");
+    div.style.padding="8px 10px";
+    div.style.border="1px solid #e2e8f0";
+    div.style.borderRadius="10px";
+    div.style.background="#fff";
+    div.innerHTML = `<strong>${d}</strong>: ${counts[i] || 0}`;
+    wrap.appendChild(div);
+  });
+}
+
+(function(){
+  const cfg = (window.WU_CONFIG || {});
+  if(!cfg.stationId || !cfg.apiKey) return;
+
+  const url = "https://api.weather.com/v2/pws/observations/all/1day"
+    + "?stationId=" + encodeURIComponent(cfg.stationId)
+    + "&format=json&units=m&numericPrecision=decimal"
+    + "&apiKey=" + encodeURIComponent(cfg.apiKey);
+
+  fetch(url)
+    .then(r=>r.json())
+    .then(d=>{
+      const obs = Array.isArray(d?.observations) ? d.observations : [];
+      const ymd = todayYMD();
+
+      const rowsToday = obs.filter(o => typeof o?.obsTimeLocal === "string" && o.obsTimeLocal.startsWith(ymd));
+      const rows = rowsToday.length ? rowsToday : obs; // fallback: últimas 24h
+
+      const speeds=[], gusts=[];
+      const counts = new Array(8).fill(0);
+
+      rows.forEach(o=>{
+        const m = o.metric || o.imperial || o || {};
+        const ws = safeNum(m.windSpeed);
+        const wg = safeNum(m.windGust);
+        const wd = safeNum(o.winddir);
+
+        if(ws!==null) speeds.push(ws);
+        if(wg!==null) gusts.push(wg);
+
+        const s = sector8(wd);
+        if(s) counts[s.i] += 1;
+      });
+
+      const mean = speeds.length ? speeds.reduce((a,b)=>a+b,0)/speeds.length : null;
+      const maxG = gusts.length ? Math.max(...gusts) : null;
+
+      const elMean = document.getElementById("vento-dia-media");
+      const elMaxG = document.getElementById("vento-dia-rajada-max");
+      if(elMean) elMean.innerText = mean===null ? "—" : `${mean.toFixed(1)} km/h`;
+      if(elMaxG) elMaxG.innerText = maxG===null ? "—" : `${maxG.toFixed(1)} km/h`;
+
+      renderWindRose(counts);
+      renderWindRoseLegend(counts);
+    })
+    .catch(()=>{});
+})();
+
+
+// =======================
+// VENTO DO DIA + ROSA DOS VENTOS
+//
+// NOTA IMPORTANTE:
+// - A "média diária" e a "rajada máx. do dia" vêm do endpoint de resumo diário (7 dias),
+//   que costuma estar disponível com mais frequência.
+// - A "rosa dos ventos" precisa de histórico por amostras (1 dia). Se esse endpoint não estiver
+//   disponível na tua chave, a rosa mostra "Sem dados" em vez de ficar vazia.
+// =======================
+function safeNum(x){
+  const n = Number(x);
+  return Number.isNaN(n) ? null : n;
+}
+function pad2(n){ return String(n).padStart(2,"0"); }
+function todayYMD(){
+  const d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth()+1) + "-" + pad2(d.getDate());
+}
+function sector8(deg){
+  const dirs = ["N","NE","E","SE","S","SW","W","NW"];
+  if(deg===null || deg===undefined) return null;
+  let a = ((deg % 360) + 360) % 360;
+  const i = Math.floor((a + 22.5) / 45) % 8;
+  return {i, label: dirs[i]};
+}
+function renderWindRose(counts){
+  const svg = document.getElementById("windrose");
+  if(!svg) return;
+  svg.innerHTML = "";
+  const cx=100, cy=100;
+  const NS="http://www.w3.org/2000/svg";
+  [20,40,60,80].forEach(r=>{
+    const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r);
+    c.setAttribute("fill","none"); c.setAttribute("stroke","#e2e8f0");
+    svg.appendChild(c);
+  });
+  [{t:"N",x:100,y:14},{t:"E",x:186,y:104},{t:"S",x:100,y:196},{t:"W",x:14,y:104}].forEach(L=>{
+    const tx=document.createElementNS(NS,"text");
+    tx.textContent=L.t;
+    tx.setAttribute("x",L.x); tx.setAttribute("y",L.y);
+    tx.setAttribute("text-anchor","middle");
+    tx.setAttribute("font-size","12");
+    tx.setAttribute("fill","#334155");
+    svg.appendChild(tx);
+  });
+
+  const maxCount = Math.max(...counts, 0);
+  const maxBar = 80;
+
+  for(let i=0;i<8;i++){
+    const count = counts[i] || 0;
+    const len = maxCount>0 ? (count/maxCount)*maxBar : 0;
+    const angle = (-90 + i*45) * Math.PI/180;
+    const x2 = cx + Math.cos(angle)*len;
+    const y2 = cy + Math.sin(angle)*len;
+
+    const line=document.createElementNS(NS,"line");
+    line.setAttribute("x1",cx); line.setAttribute("y1",cy);
+    line.setAttribute("x2",x2); line.setAttribute("y2",y2);
+    line.setAttribute("stroke","#0f172a");
+    line.setAttribute("stroke-width","6");
+    line.setAttribute("stroke-linecap","round");
+    svg.appendChild(line);
+  }
+}
+function renderWindRoseLegend(counts, note){
+  const wrap=document.getElementById("windrose-legend");
+  if(!wrap) return;
+  const dirs=["N","NE","E","SE","S","SW","W","NW"];
+  wrap.innerHTML="";
+  if(note){
+    const p=document.createElement("div");
+    p.style.gridColumn="1 / -1";
+    p.style.padding="10px";
+    p.style.border="1px dashed #cbd5e1";
+    p.style.borderRadius="10px";
+    p.style.color="#475569";
+    p.textContent = note;
+    wrap.appendChild(p);
+  }
+  dirs.forEach((d,i)=>{
+    const div=document.createElement("div");
+    div.style.padding="8px 10px";
+    div.style.border="1px solid #e2e8f0";
+    div.style.borderRadius="10px";
+    div.style.background="#fff";
+    div.innerHTML = `<strong>${d}</strong>: ${counts[i] || 0}`;
+    wrap.appendChild(div);
+  });
+}
+
+(function(){
+  const cfg = (window.WU_CONFIG || {});
+  if(!cfg.stationId || !cfg.apiKey) return;
+
+  const ymd = todayYMD();
+
+  // 1) MÉDIA DIÁRIA + RAJADA MÁX (via resumo diário 7 dias)
+  const urlDaily = "https://api.weather.com/v2/pws/dailysummary/7day"
+    + "?stationId=" + encodeURIComponent(cfg.stationId)
+    + "&format=json&units=m&numericPrecision=decimal"
+    + "&apiKey=" + encodeURIComponent(cfg.apiKey);
+
+  fetch(urlDaily)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+      const sums = Array.isArray(d?.summaries) ? d.summaries : [];
+      const today = sums.find(s => typeof s?.obsTimeLocal === "string" && s.obsTimeLocal.startsWith(ymd))
+                 || sums[sums.length - 1]; // fallback: último dia disponível
+
+      const m = today?.metric || {};
+      // Atenção: neste endpoint os campos costumam vir em minúsculas (windspeedAvg, windgustHigh)
+      const mean = safeNum(m.windspeedAvg);
+      const gustHigh = safeNum(m.windgustHigh);
+
+      const elMean = document.getElementById("vento-dia-media");
+      const elMaxG = document.getElementById("vento-dia-rajada-max");
+      if(elMean) elMean.innerText = mean===null ? "—" : `${mean.toFixed(1)} km/h`;
+      if(elMaxG) elMaxG.innerText = gustHigh===null ? "—" : `${gustHigh.toFixed(1)} km/h`;
+    })
+    .catch(() => {
+      // mantém traços
+    });
+
+  // 2) ROSA DOS VENTOS (precisa do histórico por amostras)
+  const urlRose = "https://api.weather.com/v2/pws/observations/all/1day"
+    + "?stationId=" + encodeURIComponent(cfg.stationId)
+    + "&format=json&units=m&numericPrecision=decimal"
+    + "&apiKey=" + encodeURIComponent(cfg.apiKey);
+
+  fetch(urlRose)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+      const obs = Array.isArray(d?.observations) ? d.observations : [];
+      const rowsToday = obs.filter(o => typeof o?.obsTimeLocal === "string" && o.obsTimeLocal.startsWith(ymd));
+      const rows = rowsToday.length ? rowsToday : obs;
+
+      const counts = new Array(8).fill(0);
+      rows.forEach(o=>{
+        const wd = safeNum(o.winddir);
+        const s = sector8(wd);
+        if(s) counts[s.i] += 1;
+      });
+
+      const total = counts.reduce((a,b)=>a+b,0);
+      if(total === 0){
+        renderWindRose(counts);
+        renderWindRoseLegend(counts, "Sem dados suficientes para construir a rosa dos ventos (hoje).");
+        return;
+      }
+      renderWindRose(counts);
+      renderWindRoseLegend(counts, null);
+    })
+    .catch((status) => {
+      const counts = new Array(8).fill(0);
+      renderWindRose(counts);
+      const msg = (status === 204)
+        ? "Sem dados de histórico (204) para a tua estação neste momento."
+        : "Histórico por amostras indisponível com esta chave de API (necessário para a rosa dos ventos).";
+      renderWindRoseLegend(counts, msg);
+    });
+})();
 
 
 // =======================
