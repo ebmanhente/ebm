@@ -312,6 +312,64 @@ footer img{max-width:260px;}
   *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
 }
 
+
+/* =========================
+   MOBILE-FIRST (melhorado)
+   ========================= */
+
+/* Tipografia e espaçamentos em ecrãs pequenos */
+@media (max-width:700px){
+  header{ padding:22px 16px; }
+  .header-content{ gap:14px; }
+  .header-content img{ width:70px; }
+  h1{ margin:0; font-size:1.55em; line-height:1.15; }
+  header p{ margin:6px 0 0; opacity:.95; }
+
+  main{ margin:22px auto; padding:0 14px; }
+
+  section{ padding:18px; border-radius:14px; }
+}
+
+/* Layout: 1 coluna + ordem lógica (Tempo e botões primeiro) */
+@media (max-width:900px){
+  .grid{ grid-template-columns:1fr; }
+  /* Faz a coluna direita (tempo + botões) aparecer primeiro no mobile */
+  .grid > div{ order:-1; }
+}
+
+/* Botões: maior área de toque */
+@media (max-width:560px){
+  .botoes{ gap:10px; }
+  .botao{
+    padding:16px 14px;
+    border-radius:14px;
+    justify-content:flex-start;
+  }
+  .botao i{ width:22px; text-align:center; }
+  .icon-aeaf{ height:20px; }
+}
+
+/* Redes: chips em duas linhas mais naturais */
+@media (max-width:560px){
+  .redes-links{ gap:10px; }
+  .rede{
+    padding:10px 12px;
+    font-size:.95em;
+  }
+}
+
+/* Sobre a escola: lista em 1 coluna no telemóvel (caso não tenha apanhado) */
+@media (max-width:560px){
+  .sobre-lista{ columns:1; }
+}
+
+/* Tempo mini: reduzir ligeiramente números para não quebrar */
+@media (max-width:420px){
+  #linha-temp{ font-size:2.05em; }
+  #dados-tempo{ font-size:.88em; }
+  .logo-tempo{ max-width:92px; }
+}
+
 </style>
 
 <script async
