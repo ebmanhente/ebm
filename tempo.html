@@ -162,14 +162,47 @@ footer{
   font-size:.8em;
   color:#6b7280;
 }
+
+
+/* SEMÁFORO SISMOS */
+.semaforo{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  margin-right:6px;
+  font-size:.7em;
+  color:white;
+  font-weight:700;
+}
+.verde{background:#16a34a;}
+.amarelo{background:#f59e0b;}
+.vermelho{background:#dc2626;}
+
+
+details summary {
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 25px;
+}
+details summary::marker {
+  font-size: 1.2em;
+}
+
 </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
 
+
+
+
 <header>
   <div class="header-content">
-    <img src="logo-eb-manhente.png" alt="EB de Manhente">
+    <img src="logo_meteomanhente.png" alt="MeteoManhente – EB de Manhente" style="width:72px;height:72px;object-fit:cover;border-radius:50%;" >
     <div>
       <h1>Tempo Meteorológico</h1>
       <p>
@@ -216,14 +249,81 @@ footer{
   </div>
 
   <div id="dias"></div>
+
+<div id="qualidade-ar" style="margin-top:50px;">
+  <h2>Qualidade do Ar</h2>
+
+  <div id="aq-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:15px;">
+    <div class="indicador"><strong>PM2.5</strong><br><span id="pm25">—</span></div>
+    <div class="indicador"><strong>Índice (EU)</strong><br><span id="aqi-eu">—</span></div>
+    <div class="indicador"><strong>Estado</strong><br><span id="aq-estado">—</span></div>
+  </div>
+
+  <div style="margin-top:10px; font-size:.85em; color:#475569;">
+    Atualizado: <span id="aq-hora">—</span> · Fonte: Open‑Meteo (modelo)
+  </div>
 </div>
 
-<div id="sensores">
-  <h2>Sensores da Estação Local</h2>
-  <div id="sensores-grid"></div>
+</div>
+
+<details open>
+  <summary><strong>Sensores da estação local</strong></summary>
+  <div id="sensores">
+    <h2>Sensores da Estação Local</h2>
+    <div id="sensores-grid"></div>
+  </div>
+</details>
+
+
+
+
+
+<div id="sismos" style="margin-top:50px;">
+  <h2>Sismos</h2>
+
+  <div id="sismos-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:15px;">
+    <details open>
+<summary><strong>Portugal – mais recentes</strong></summary>
+<div class="indicador">
+      <strong>Portugal – mais recentes</strong>
+      <div id="sismos-pt-recentes" style="margin-top:10px; text-align:left;">A carregar…</div>
+      <div style="margin-top:10px;">
+        <a href="https://www.ipma.pt/pt/geofisica/sismicidade/" target="_blank" rel="noopener noreferrer">Ver sismicidade (IPMA)</a>
+      </div>
+    </div>
+</details>
+
+    <details open>
+<summary><strong>Portugal – Norte prioritário</strong></summary>
+<div class="indicador">
+      <strong>Portugal – Norte prioritário</strong>
+      <div id="sismos-pt-norte" style="margin-top:10px; text-align:left;">A carregar…</div>
+      <div style="margin-top:10px;">
+        <a href="https://www.ipma.pt/pt/geofisica/sismicidade/" target="_blank" rel="noopener noreferrer">Ver sismicidade (IPMA)</a>
+      </div>
+    </div>
+</details>
+
+    <details>
+<summary><strong>Mais relevantes no mundo</strong></summary>
+<div class="indicador">
+      <strong>Mais relevantes no mundo</strong>
+      <div id="sismos-mundo" style="margin-top:10px; text-align:left;">A carregar…</div>
+      <div style="margin-top:10px;">
+        <a href="https://earthquake.usgs.gov/earthquakes/map/?extent=-90,-180&extent=90,180" target="_blank" rel="noopener noreferrer">Ver mapa (USGS)</a>
+      </div>
+    </div>
+</details>
+  </div>
+
+  <div style="margin-top:10px; font-size:.85em; color:#475569;">
+    🟢 Fraco &nbsp; 🟡 Moderado &nbsp; 🔴 Forte — classificação baseada na magnitude.
+  </div>
 </div>
 
 <div id="legenda">
+
+
   Projeto da Associação<br>
   <a href="https://borambientar.pt/" target="_blank" rel="noopener noreferrer">
     <img src="logo-bora-ambientar.png" alt="BORA AMBIENTAR" class="logo-bora">
@@ -243,7 +343,9 @@ const apiKey="cc9cbc0aeacb47899cbc0aeacbc7891b";
 
 // 1 casa decimal
 function format1(n){
-  return Number(n).toFixed(1);
+  const x = Number(n);
+  if (Number.isNaN(x)) return "—";
+  return x.toFixed(1);
 }
 
 // ÍCONES (Open-Meteo weathercode)
@@ -306,10 +408,14 @@ Promise.all([iconePromise]).then(()=>{
     sensor("Sensação Térmica", format1(o.metric.heatIndex), " °C") +
     sensor("Ponto de Orvalho", format1(o.metric.dewpt), " °C") +
     sensor("Wind Chill", format1(o.metric.windChill), " °C") +
+    sensor("Vento", o.metric.windSpeed, " km/h") +
+    sensor("Rajada", o.metric.windGust, " km/h") +
+    sensor("Direção do vento", o.winddir, "°") +
     sensor("Índice UV", o.uv) +
     sensor("Radiação Solar", o.solarRadiation, " W/m²") +
     sensor("Visibilidade", o.metric.visibility, " km") +
     sensor("Chuva (hora)", o.metric.precipRate, " mm/h") +
+    sensor("Chuva (dia)", o.metric.precipToday, " mm") +
     sensor("Chuva acumulada", o.metric.precipTotal, " mm");
 })
 .catch(()=>{
@@ -351,6 +457,251 @@ fetch("https://api.open-meteo.com/v1/forecast?latitude=41.5388&longitude=-8.6151
       </div>`;
   });
 });
+
+
+
+// =======================
+// QUALIDADE DO AR (Open-Meteo Air Quality)
+// =======================
+function estadoArPorPM25(pm25){
+  if(pm25===null || pm25===undefined || Number.isNaN(pm25)) return "—";
+  // Escala simples (aprox.) baseada em orientações comuns (µg/m³)
+  if(pm25 <= 5) return "Excelente";
+  if(pm25 <= 10) return "Boa";
+  if(pm25 <= 15) return "Razoável";
+  if(pm25 <= 25) return "Moderada";
+  if(pm25 <= 35) return "Fraca";
+  if(pm25 <= 50) return "Má";
+  return "Muito má";
+}
+
+function fmtHoraCurta(dt){
+  return dt.toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"});
+}
+
+function setAQ(elId, value){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  el.innerText = value;
+}
+
+fetch("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=41.5388&longitude=-8.6151&current=pm2_5,european_aqi&timezone=Europe/Lisbon")
+  .then(r=>r.json())
+  .then(d=>{
+    const pm25 = d?.current?.pm2_5;
+    const aqi = d?.current?.european_aqi;
+
+    setAQ("pm25", (pm25===undefined || pm25===null) ? "—" : (format1(pm25) + " µg/m³"));
+    setAQ("aqi-eu", (aqi===undefined || aqi===null) ? "—" : aqi);
+    setAQ("aq-estado", estadoArPorPM25(pm25));
+    setAQ("aq-hora", fmtHoraCurta(new Date()));
+  })
+  .catch(()=>{
+    setAQ("aq-estado", "Indisponível");
+    setAQ("aq-hora", fmtHoraCurta(new Date()));
+  });
+
+
+// =======================
+// SISMOS (USGS - dados públicos)
+// =======================
+
+// Feeds USGS GeoJSON (públicos)
+const USGS_ALL_WEEK = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+const USGS_SIGNIFICANT_WEEK = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson";
+
+// IPMA (sismicidade Portugal) – dados públicos (30 dias)
+const IPMA_SEISMIC_CONT = "https://api.ipma.pt/open-data/observation/seismic/7.json";
+const IPMA_SEISMIC_AZORES = "https://api.ipma.pt/open-data/observation/seismic/3.json";
+
+
+// Portugal (bbox abrangente: continente + Açores/Madeira com folga)
+const PT_BBOX = {
+  minLat: 30.0,
+  maxLat: 43.5,
+  minLon: -32.5,
+  maxLon: -6.0
+};
+
+function dentroBBox(lat, lon, bbox){
+  return lat >= bbox.minLat && lat <= bbox.maxLat && lon >= bbox.minLon && lon <= bbox.maxLon;
+}
+
+function fmtData(ms){
+  return new Date(ms).toLocaleString("pt-PT", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function fmtNum(n, casas=1){
+  if(n === null || n === undefined) return "—";
+  return Number(n).toFixed(casas);
+}
+
+function semaforoMag(mag){
+  if(mag === null || mag === undefined) return "";
+  if(mag < 4) return `<span class="semaforo verde">●</span>`;
+  if(mag < 6) return `<span class="semaforo amarelo">●</span>`;
+  return `<span class="semaforo vermelho">●</span>`;
+}
+
+function criarLinhaSismo(f){
+  const p = f.properties || {};
+  const g = f.geometry || {};
+  const coords = (g.coordinates || []);
+  const depth = coords[2];
+
+  const mag = p.mag;
+  const place = p.place || "Local desconhecido";
+  const time = p.time;
+  const felt = p.felt; // nº de relatos "felt" (quando existe)
+  const cdi = p.cdi;   // intensidade (quando existe)
+  const url = p.url;   // link oficial do evento
+
+  const badge =
+    (felt ? `👥 ${felt}` : "") +
+    (cdi ? ` · Int. ${fmtNum(cdi,1)}` : "");
+
+  return `
+    <div style="padding:10px 0; border-bottom:1px solid #e5e7eb;">
+      <div style="font-weight:700;">
+        ${semaforoMag(mag)} M ${fmtNum(mag,1)} · ${place}
+      </div>
+      <div style="font-size:.9em; color:#334155;">
+        ${fmtData(time)} · Prof.: ${fmtNum(depth,0)} km ${badge ? "· " + badge : ""}
+      </div>
+      ${url ? `<div style="margin-top:4px;"><a href="${url}" target="_blank" rel="noopener noreferrer">Detalhes</a></div>` : ""}
+    </div>
+  `;
+}
+
+
+// Preferências locais (Portugal)
+// Ajusta este valor se quiseres um 'Norte' mais apertado/mais largo.
+const NORTE_MIN_LAT = 40.2; // ~Minho/Porto para cima
+
+function isNortePT(ev){
+  const lat = parseFloat(ev.lat);
+  return !Number.isNaN(lat) && lat >= NORTE_MIN_LAT;
+}
+
+function hasDegree(ev){
+  return ev.degree !== null && ev.degree !== undefined && ev.degree !== "";
+}
+
+
+async function carregarSismosPortugal(){
+  const elRecentes = document.getElementById("sismos-pt-recentes");
+  const elNorte = document.getElementById("sismos-pt-norte");
+  if(!elRecentes || !elNorte) return;
+
+  try{
+    const [r1, r2] = await Promise.all([
+      fetch(IPMA_SEISMIC_CONT),
+      fetch(IPMA_SEISMIC_AZORES)
+    ]);
+
+    const [cont, azo] = await Promise.all([r1.json(), r2.json()]);
+
+    const items = []
+      .concat((cont.data || []).map(x => ({...x, __area: "Continente/Madeira"})))
+      .concat((azo.data || []).map(x => ({...x, __area: "Açores"})));
+
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+    const normalizados = items.map(it => {
+      const t = new Date(it.time + "Z").getTime();
+      return {...it, __t: t};
+    }).filter(it => !Number.isNaN(it.__t) && it.__t >= weekAgo);
+
+    // OPÇÃO 1 – mais recentes
+    const recentes = [...normalizados]
+      .sort((a,b) => b.__t - a.__t)
+      .slice(0, 8);
+
+    // OPÇÃO 2 – Norte prioritário
+    const NORTE_MIN_LAT = 40.2;
+    const norte = [...normalizados]
+      .sort((a,b) => {
+        const aN = (Number(a.lat) >= NORTE_MIN_LAT) ? 1 : 0;
+        const bN = (Number(b.lat) >= NORTE_MIN_LAT) ? 1 : 0;
+        if(bN !== aN) return bN - aN;
+        return b.__t - a.__t;
+      })
+      .slice(0, 8);
+
+    elRecentes.innerHTML = recentes.length
+      ? recentes.map(renderIPMA).join("")
+      : "<div>Sem registos na última semana.</div>";
+
+    elNorte.innerHTML = norte.length
+      ? norte.map(renderIPMA).join("")
+      : "<div>Sem registos no Norte na última semana.</div>";
+
+  }catch(e){
+    elRecentes.innerHTML = "Erro ao carregar dados (IPMA)";
+    elNorte.innerHTML = "Erro ao carregar dados (IPMA)";
+  }
+}
+
+
+function renderIPMA(it){
+  const mag = Number(it.magnitud);
+  const badge = (it.degree !== null && it.degree !== undefined && String(it.degree).trim() !== "")
+    ? ` · Intensidade ${it.degree}` : "";
+
+  // Campo do local no IPMA pode variar; tentamos vários para não ficar vazio.
+  const placeCore =
+    (it.local && String(it.local).trim()) ||
+    (it.obsRegion && String(it.obsRegion).trim()) ||
+    (it.region && String(it.region).trim()) ||
+    (it.place && String(it.place).trim()) ||
+    "Portugal";
+
+  const place = `${placeCore} (${it.__area || ""})`.replace(/\s+\(\)/g,"").trim();
+
+  return `
+    <div style="padding:10px 0; border-bottom:1px solid #e5e7eb;">
+      <div style="font-weight:700;">
+        ${semaforoMag(mag)} M ${fmtNum(mag,1)} · ${place}
+      </div>
+      <div style="font-size:.9em; color:#334155;">
+        ${fmtData(it.__t)} · Prof.: ${fmtNum(it.depth,0)} km${badge}
+      </div>
+    </div>
+  `;
+}
+
+async function carregarSismosMundoRelevantes(){
+  const el = document.getElementById("sismos-mundo");
+  if(!el) return;
+
+  try{
+    const r = await fetch(USGS_SIGNIFICANT_WEEK);
+    const data = await r.json();
+    const feats = (data.features || [])
+      .sort((a,b) => (b.properties.mag || 0) - (a.properties.mag || 0))
+      .slice(0, 5);
+
+    if(feats.length === 0){
+      el.innerHTML = `<div style="color:#334155;">Sem sismos "significativos" registados (última semana).</div>`;
+      return;
+    }
+
+    el.innerHTML = feats.map(criarLinhaSismo).join("");
+  }catch(e){
+    el.innerHTML = `<div style="color:#b91c1c;">Não foi possível carregar os dados (USGS).</div>`;
+  }
+}
+
+// Carregar ao abrir a página
+carregarSismosPortugal();
+carregarSismosMundoRelevantes();
+
 </script>
 
 </body>
