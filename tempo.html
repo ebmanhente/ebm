@@ -408,8 +408,8 @@ Promise.all([iconePromise]).then(()=>{
     sensor("Sensação Térmica", format1(o.metric.heatIndex), " °C") +
     sensor("Ponto de Orvalho", format1(o.metric.dewpt), " °C") +
     sensor("Wind Chill", format1(o.metric.windChill), " °C") +
-    sensor("Vento", o.metric.windSpeed, " km/h") +
-    sensor("Rajada", o.metric.windGust, " km/h") +
+    sensor("Vento (atual)", o.metric.windSpeed, " km/h") +
+    sensor("Rajada (máx. recente)", o.metric.windGust, " km/h") +
     sensor("Direção do vento", o.winddir, "°") +
     sensor("Índice UV", o.uv) +
     sensor("Radiação Solar", o.solarRadiation, " W/m²") +
