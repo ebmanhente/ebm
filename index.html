@@ -331,7 +331,7 @@ footer img{max-width:260px;}
   /* Botões: 2 colunas para ocupar menos altura */
   .botoes{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr; /* 1 por linha no telemóvel */
     gap:10px;
   }
   .botao{
@@ -358,6 +358,33 @@ footer img{max-width:260px;}
 @media (max-width: 380px){
   .botoes{ grid-template-columns:1fr; }
   .botao{ justify-content:flex-start; text-align:left; padding:14px; }
+}
+
+
+/* =========================
+   GRID-1COL-STRONG (telemóvel)
+   ========================= */
+@media (max-width: 900px){
+  .grid{
+    grid-template-columns:1fr !important;
+    gap:16px;
+  }
+  /* garantir que a coluna da direita ocupa 100% */
+  .grid > div{ width:100%; }
+}
+
+
+/* BOTAO-MOBILE-STACK */
+@media (max-width: 600px){
+  .botao{
+    justify-content:flex-start;
+    text-align:left;
+    gap:12px;
+  }
+  .botao i{ width:22px; text-align:center; }
+  /* AEAF logo alinhado com ícone */
+  .botao.aeaf{ justify-content:flex-start; }
+  .icon-aeaf{ margin-right:2px; }
 }
 
 </style>
