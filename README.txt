@@ -1,1 +1,1 @@
-Atualização: estatísticas diárias agora usam SEMPRE o resumo mais recente (epoch maior) e a rosa tem fallback com direção média do dia.
+Hard fix: removidas duplicações e JS aponta explicitamente para #rosa-dos-ventos #windrose e #windrose-legend. Rosa+indicadores depois dos sensores; cortinas abertas.

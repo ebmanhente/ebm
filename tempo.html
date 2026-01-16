@@ -266,13 +266,35 @@ details summary::marker {
 
 </div>
 
+<details open>
+  <summary><strong>Sensores da estação local</strong></summary>
+  <div id="sensores">
+    <h2>Sensores da Estação Local</h2>
+    <div id="sensores-grid"></div>
+  </div>
+</details>
+
+
 <div id="rosa-dos-ventos" style="margin-top:40px;">
   <h2>Rosa dos Ventos (hoje)</h2>
+
+  <div class="info-grid" style="margin:12px 0 14px;">
+    <div class="info-card">
+      <h3>Média diária do vento</h3>
+      <p id="vento-dia-media">—</p>
+    </div>
+    <div class="info-card">
+      <h3>Rajada máx. do dia</h3>
+      <p id="vento-dia-rajada-max">—</p>
+    </div>
+  </div>
+
   <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
     <div style="width:260px; max-width:90vw;">
       <svg id="windrose" viewBox="0 0 200 200" style="width:100%; height:auto; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px;"></svg>
       <div style="margin-top:8px; font-size:.85em; color:#475569;">Baseado nas observações da estação (últimas 24h, filtradas para hoje).</div>
     </div>
+
     <div style="min-width:240px; flex:1;">
       <div style="font-size:.9em; color:#0f172a;"><strong>Distribuição por direção</strong></div>
       <div id="windrose-legend" style="margin-top:10px; display:grid; grid-template-columns:repeat(2, minmax(120px,1fr)); gap:8px;"></div>
@@ -280,13 +302,8 @@ details summary::marker {
   </div>
 </div>
 
-<details>
-  <summary><strong>Sensores da estação local</strong></summary>
-  <div id="sensores">
-    <h2>Sensores da Estação Local</h2>
-    <div id="sensores-grid"></div>
-  </div>
-</details>
+
+
 
 
 
@@ -296,7 +313,7 @@ details summary::marker {
   <h2>Sismos</h2>
 
   <div id="sismos-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:15px;">
-    <details>
+    <details open>
 <summary><strong>Portugal – mais recentes</strong></summary>
 <div class="indicador">
       <strong>Portugal – mais recentes</strong>
@@ -307,7 +324,7 @@ details summary::marker {
     </div>
 </details>
 
-    <details>
+    <details open>
 <summary><strong>Portugal – Norte prioritário</strong></summary>
 <div class="indicador">
       <strong>Portugal – Norte prioritário</strong>
@@ -318,7 +335,7 @@ details summary::marker {
     </div>
 </details>
 
-    <details>
+    <details open>
 <summary><strong>Mais relevantes no mundo</strong></summary>
 <div class="indicador">
       <strong>Mais relevantes no mundo</strong>
@@ -538,7 +555,7 @@ function sector8(deg){
   return {i, label: dirs[i]};
 }
 function renderWindRose(counts){
-  const svg = document.getElementById("windrose");
+  const svg = document.querySelector("#rosa-dos-ventos #windrose");
   if(!svg) return;
   svg.innerHTML = "";
   const cx=100, cy=100;
@@ -581,7 +598,7 @@ function renderWindRose(counts){
   }
 }
 function renderWindRoseLegend(counts){
-  const wrap=document.getElementById("windrose-legend");
+  const wrap=document.querySelector("#rosa-dos-ventos #windrose-legend");
   if(!wrap) return;
   const dirs=["N","NE","E","SE","S","SW","W","NW"];
   wrap.innerHTML="";
@@ -671,7 +688,7 @@ function sector8(deg){
   return {i, label: dirs[i]};
 }
 function renderWindRose(counts){
-  const svg = document.getElementById("windrose");
+  const svg = document.querySelector("#rosa-dos-ventos #windrose");
   if(!svg) return;
   svg.innerHTML = "";
   const cx=100, cy=100;
@@ -712,7 +729,7 @@ function renderWindRose(counts){
   }
 }
 function renderWindRoseLegend(counts, note){
-  const wrap=document.getElementById("windrose-legend");
+  const wrap=document.querySelector("#rosa-dos-ventos #windrose-legend");
   if(!wrap) return;
   const dirs=["N","NE","E","SE","S","SW","W","NW"];
   wrap.innerHTML="";
@@ -837,7 +854,7 @@ function sector8(deg){
   return {i, label: dirs[i]};
 }
 function renderWindRose(counts){
-  const svg = document.getElementById("windrose");
+  const svg = document.querySelector("#rosa-dos-ventos #windrose");
   if(!svg) return;
   svg.innerHTML = "";
   const cx=100, cy=100;
@@ -878,7 +895,7 @@ function renderWindRose(counts){
   }
 }
 function drawAvgDirectionArrow(deg){
-  const svg = document.getElementById("windrose");
+  const svg = document.querySelector("#rosa-dos-ventos #windrose");
   if(!svg) return;
   const NS="http://www.w3.org/2000/svg";
   const cx=100, cy=100;
@@ -900,7 +917,7 @@ function drawAvgDirectionArrow(deg){
   svg.appendChild(tip);
 }
 function renderWindRoseLegend(counts, note){
-  const wrap=document.getElementById("windrose-legend");
+  const wrap=document.querySelector("#rosa-dos-ventos #windrose-legend");
   if(!wrap) return;
   const dirs=["N","NE","E","SE","S","SW","W","NW"];
   wrap.innerHTML="";
