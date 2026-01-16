@@ -111,7 +111,7 @@ section{
 
 /* TEMPO MINI */
 #tempo-mini{
-  background:linear-gradient(135deg,#2563eb,#1e40af);
+  background:linear-gradient(135deg,#16a34a,#166534);
   color:white;
   border-radius:16px;
   padding:20px;
@@ -274,6 +274,44 @@ footer img{max-width:260px;}
   font-weight:600;
   opacity:.95;
 }
+
+/* LOGÓTIPO METEOMANHENTE (no bloco do tempo) */
+.tempo-logo-link{ display:inline-block; }
+.logo-tempo{
+  max-width:110px;
+  margin:0 auto 10px;
+  display:block;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.22));
+  transition:transform .22s ease, opacity .22s ease;
+}
+.tempo-logo-link:hover .logo-tempo{
+  transform:scale(1.05) rotate(-1deg);
+  opacity:.98;
+}
+
+/* Animação discreta no cartão do tempo */
+#tempo-mini{
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+#tempo-mini:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 26px rgba(0,0,0,.18);
+}
+
+/* Mobile-first: header em coluna quando apertado */
+@media (max-width:560px){
+  .header-content{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+}
+
+/* Respeitar utilizadores com menos animação */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}
+
 </style>
 
 <script async
@@ -287,7 +325,7 @@ footer img{max-width:260px;}
 
 <header>
   <div class="header-content">
-    <img src="logo-eb-manhente.png" alt="EB de Manhente">
+    <a href="index.html" aria-label="Voltar ao início"><img src="logo-eb-manhente.png" alt="EB de Manhente"></a>
     <div>
       <h1>Escola Básica de Manhente</h1>
       <p>Barcelos</p>
@@ -356,6 +394,10 @@ footer img{max-width:260px;}
 
     <!-- TEMPO -->
     <div id="tempo-mini">
+    <a href="tempo.html" class="tempo-logo-link" aria-label="Abrir página do MeteoManhente">
+      <img src="logo_meteomanhente.png" alt="MeteoManhente" class="logo-tempo">
+    </a>
+
     <div id="linha-temp">
       <i class="fa-solid fa-temperature-half" aria-hidden="true"></i>
       <span id="valor-temp">— °C</span>
