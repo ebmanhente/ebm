@@ -292,11 +292,11 @@ details summary::marker {
   <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
     <div style="width:260px; max-width:90vw;">
       <svg id="windrose" viewBox="0 0 200 200" style="width:100%; height:auto; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px;"></svg>
-      <div style="margin-top:8px; font-size:.85em; color:#475569;">Baseado nas observações da estação (últimas 24h, filtradas para hoje).</div>
+      <div style="margin-top:8px; font-size:.85em; color:#475569;">Baseado nas observações da estação (direção média por período nas últimas 24h).</div>
     </div>
 
     <div style="min-width:240px; flex:1;">
-      <div style="font-size:.9em; color:#0f172a;"><strong>Distribuição por direção</strong></div>
+      <div style="font-size:.9em; color:#0f172a;"><strong>Distribuição por direção (média por período)</strong></div>
       <div id="windrose-legend" style="margin-top:10px; display:grid; grid-template-columns:repeat(2, minmax(120px,1fr)); gap:8px;"></div>
     </div>
   </div>
@@ -638,7 +638,7 @@ function renderWindRoseLegend(counts){
         const m = o.metric || o.imperial || o || {};
         const ws = safeNum(m.windSpeed);
         const wg = safeNum(m.windGust);
-        const wd = safeNum(o.winddir);
+        const wd = safeNum((o.winddir ?? o.winddirAvg));
 
         if(ws!==null) speeds.push(ws);
         if(wg!==null) gusts.push(wg);
@@ -802,7 +802,7 @@ function renderWindRoseLegend(counts, note){
 
       const counts = new Array(8).fill(0);
       rows.forEach(o=>{
-        const wd = safeNum(o.winddir);
+        const wd = safeNum((o.winddir ?? o.winddirAvg));
         const s = sector8(wd);
         if(s) counts[s.i] += 1;
       });
@@ -987,7 +987,7 @@ function renderWindRoseLegend(counts, note){
 
       const counts = new Array(8).fill(0);
       rows.forEach(o=>{
-        const wd = safeNum(o.winddir);
+        const wd = safeNum((o.winddir ?? o.winddirAvg));
         const s = sector8(wd);
         if(s) counts[s.i] += 1;
       });
@@ -1000,7 +1000,7 @@ function renderWindRoseLegend(counts, note){
         if(avg!==null){
           drawAvgDirectionArrow(avg);
           const s = sector8(avg);
-          renderWindRoseLegend(counts, `Ainda sem histórico suficiente para a rosa. Direção média do dia: ${avg.toFixed(0)}° (${s ? s.label : "—"}).`);
+          renderWindRoseLegend(counts, `Direções calculadas a partir de médias por período. Direção média do dia: ${avg.toFixed(0)}° (${s ? s.label : "—"}).`);
         }else{
           renderWindRoseLegend(counts, "Ainda sem dados suficientes para construir a rosa dos ventos (hoje).");
         }
