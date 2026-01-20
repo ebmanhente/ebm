@@ -193,6 +193,7 @@ details summary::marker {
 
 </style>
   <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -226,6 +227,20 @@ details summary::marker {
   <div id="hora"></div>
   <div id="fonte"></div>
 </div>
+
+<div style="margin-top:40px;">
+  <h2>Temperatura diária (estação local)</h2>
+
+  <div style="background:white; padding:20px; border-radius:14px; box-shadow:0 4px 12px rgba(0,0,0,.08);">
+    <div style="position:relative; height:260px;">
+      <canvas id="grafico-temp-diaria"></canvas>
+    </div>
+    <div id="nota-temp-diaria" style="margin-top:8px; font-size:.85em; color:#475569;">
+      A carregar dados da estação…
+    </div>
+  </div>
+</div>
+
 
 <div id="acessos">
   <a class="card wu" href="https://www.wunderground.com/weather/pt/manhente/IMANHE1" target="_blank">
@@ -1219,6 +1234,80 @@ async function carregarSismosMundoRelevantes(){
 carregarSismosPortugal();
 carregarSismosMundoRelevantes();
 
+
+
+// =======================
+// GRÁFICO DIÁRIO DE TEMPERATURA (estação local)
+// Fonte: Weather Underground (PWS) dailysummary/7day
+// =======================
+let graficoTemp;
+
+function criarGraficoTemp(labels, min, max, media){
+  const canvas = document.getElementById("grafico-temp-diaria");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if(graficoTemp) graficoTemp.destroy();
+
+  graficoTemp = new Chart(ctx,{
+    type:"line",
+    data:{
+      labels,
+      datasets:[
+        {label:"Máx (°C)", data:max, tension:.3},
+        {label:"Média (°C)", data:media, tension:.3},
+        {label:"Mín (°C)", data:min, tension:.3}
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{mode:"index",intersect:false},
+      scales:{
+        y:{title:{display:true,text:"°C"}}
+      }
+    }
+  });
+}
+
+(function(){
+  const noteEl = document.getElementById("nota-temp-diaria");
+  const cfg = (window.WU_CONFIG || {});
+  if(!cfg.stationId || !cfg.apiKey){
+    if(noteEl) noteEl.innerText = "Configuração da estação indisponível (config.js).";
+    return;
+  }
+
+  const url = "https://api.weather.com/v2/pws/dailysummary/7day"
+    + "?stationId=" + encodeURIComponent(cfg.stationId)
+    + "&format=json&units=m&numericPrecision=decimal"
+    + "&apiKey=" + encodeURIComponent(cfg.apiKey);
+
+  fetch(url)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+      const dias = Array.isArray(d?.summaries) ? d.summaries : [];
+      if(!dias.length) throw "sem dados";
+
+      const labels=[], min=[], max=[], media=[];
+
+      dias.slice(-7).forEach(x => {
+        const dt = new Date(x.obsTimeLocal);
+        labels.push(dt.toLocaleDateString("pt-PT",{weekday:"short"}));
+
+        const lo = Number(x?.metric?.tempLow);
+        const hi = Number(x?.metric?.tempHigh);
+        min.push(Number.isFinite(lo) ? lo : null);
+        max.push(Number.isFinite(hi) ? hi : null);
+        media.push((Number.isFinite(lo) && Number.isFinite(hi)) ? Number(((lo+hi)/2).toFixed(1)) : null);
+      });
+
+      criarGraficoTemp(labels, min, max, media);
+      if(noteEl) noteEl.innerText = "Fonte: Estação meteorológica da EB de Manhente (Weather Underground).";
+    })
+    .catch(() => {
+      if(noteEl) noteEl.innerText = "Histórico diário indisponível para o gráfico.";
+    });
+})();
 </script>
 
 </body>
