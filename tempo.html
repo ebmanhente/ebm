@@ -1444,11 +1444,42 @@ async function __fetchHistoryForDate(dateYYYYMMDD){
   return obs;
 }
 
+function __extractTemp(o){
+  // Robustez entre endpoints: por vezes vem temp, tempAvg, tempHigh/tempLow, ou mesmo em root.
+  const m = o?.metric || {};
+  const im = o?.imperial || {};
+  const candidates = [
+    m.temp,
+    m.tempAvg,
+    m.tempHigh,
+    m.tempLow,
+    im.temp,
+    im.tempAvg,
+    im.tempHigh,
+    im.tempLow,
+    o?.temp,
+    o?.temperature,
+    o?.tempC,
+    o?.metricTemp
+  ];
+  for(const c of candidates){
+    const n = __safeNum(c);
+    if(n!=null) return n;
+  }
+  return null;
+}
+
 function __tempsFromObs(obs){
   const temps = [];
   obs.forEach(o=>{
-    const m = o.metric || o.imperial || {};
-    const t = __safeNum(m.temp ?? o.temp);
+    // Se houver high/low na observação, registamos ambos (ajuda a calcular extremos do dia)
+    const m = o?.metric || {};
+    const hi = __safeNum(m.tempHigh);
+    const lo = __safeNum(m.tempLow);
+    if(hi!=null) temps.push(hi);
+    if(lo!=null) temps.push(lo);
+
+    const t = __extractTemp(o);
     if(t!=null) temps.push(t);
   });
   return temps;
@@ -1600,7 +1631,7 @@ async function loadTempHourly(){
 
     rows.sort((a,b)=>(a.epoch||0)-(b.epoch||0)).forEach(o=>{
       const t = new Date(o.obsTimeLocal || o.obsTimeUtc || (o.epoch? o.epoch*1000 : NaN));
-      const temp = __safeNum((o.metric||{}).temp);
+      const temp = __extractTemp(o);
       if(Number.isNaN(t.getTime()) || temp==null) return;
 
       const ms = t.getTime();
