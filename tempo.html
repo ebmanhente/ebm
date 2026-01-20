@@ -192,8 +192,8 @@ details summary::marker {
 }
 
 </style>
-  <script src="config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -228,19 +228,38 @@ details summary::marker {
   <div id="fonte"></div>
 </div>
 
-<div style="margin-top:40px;">
-  <h2>Temperatura diária (estação local)</h2>
+<!-- =======================
+     GRÁFICOS (TEMPERATURA)
+     ======================= -->
+<div id="charts-temperatura" style="margin-top:40px;">
+  <h2>Temperatura — gráficos</h2>
 
-  <div style="background:white; padding:20px; border-radius:14px; box-shadow:0 4px 12px rgba(0,0,0,.08);">
-    <div style="position:relative; height:260px;">
-      <canvas id="grafico-temp-diaria"></canvas>
+  <!-- Botões de período -->
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 12px;">
+    <button class="btn-periodo" data-days="7"  style="border:1px solid #cbd5e1; background:#ffffff; padding:8px 12px; border-radius:10px; cursor:pointer;">7 dias</button>
+    <button class="btn-periodo" data-days="14" style="border:1px solid #cbd5e1; background:#ffffff; padding:8px 12px; border-radius:10px; cursor:pointer;">14 dias</button>
+    <button class="btn-periodo" data-days="30" style="border:1px solid #cbd5e1; background:#ffffff; padding:8px 12px; border-radius:10px; cursor:pointer;">30 dias</button>
+  </div>
+
+  <!-- Gráfico diário -->
+  <div class="indicador" style="text-align:left;">
+    <strong>Diário (mín / média / máx)</strong>
+    <div style="position:relative; height:260px; margin-top:12px;">
+      <canvas id="tempDailyChart"></canvas>
     </div>
-    <div id="nota-temp-diaria" style="margin-top:8px; font-size:.85em; color:#475569;">
-      A carregar dados da estação…
+    <div id="tempDailyInsight" style="margin-top:10px; font-size:.9em; color:#334155;">A carregar…</div>
+    <div id="tempDailyNote" style="margin-top:6px; font-size:.85em; color:#64748b;">Fonte: Estação meteorológica (Weather Underground).</div>
+  </div>
+
+  <!-- Gráfico horário -->
+  <div class="indicador" style="text-align:left; margin-top:15px;">
+    <strong>Hoje (hora a hora)</strong>
+    <div style="position:relative; height:240px; margin-top:12px;">
+      <canvas id="tempHourlyChart"></canvas>
     </div>
+    <div id="tempHourlyNote" style="margin-top:8px; font-size:.85em; color:#64748b;">A carregar…</div>
   </div>
 </div>
-
 
 <div id="acessos">
   <a class="card wu" href="https://www.wunderground.com/weather/pt/manhente/IMANHE1" target="_blank">
@@ -1237,77 +1256,277 @@ carregarSismosMundoRelevantes();
 
 
 // =======================
-// GRÁFICO DIÁRIO DE TEMPERATURA (estação local)
-// Fonte: Weather Underground (PWS) dailysummary/7day
+// GRÁFICOS DE TEMPERATURA (ESTAÇÃO LOCAL)
+// - Diário: dailysummary/30day (slice 7/14/30)
+// - Horário (hoje): observations/all/1day
 // =======================
-let graficoTemp;
+let __tempDailyChart = null;
+let __tempHourlyChart = null;
 
-function criarGraficoTemp(labels, min, max, media){
-  const canvas = document.getElementById("grafico-temp-diaria");
+function __setActivePeriodo(days){
+  document.querySelectorAll('.btn-periodo').forEach(b=>{
+    const isOn = String(b.dataset.days) === String(days);
+    b.style.background = isOn ? '#e0f2fe' : '#ffffff';
+    b.style.borderColor = isOn ? '#38bdf8' : '#cbd5e1';
+    b.style.fontWeight = isOn ? '700' : '600';
+  });
+}
+
+function __safeNum(x){
+  const n = Number(x);
+  return Number.isNaN(n) ? null : n;
+}
+
+function __format1(n){
+  const x = Number(n);
+  if (Number.isNaN(x)) return '—';
+  return x.toFixed(1);
+}
+
+function __sameDayLocal(a, b){
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+function __buildDailyInsight(days, daily){
+  const el = document.getElementById('tempDailyInsight');
+  if(!el) return;
+
+  if(!daily || daily.labels.length < 2){
+    el.textContent = 'Sem dados suficientes para análise.';
+    return;
+  }
+
+  const iLast = daily.labels.length - 1;
+  const tMin = daily.min[iLast];
+  const tMax = daily.max[iLast];
+  const amp = (tMin!=null && tMax!=null) ? (tMax - tMin) : null;
+
+  // média da amplitude nos dias anteriores
+  const amps = [];
+  for(let i=0;i<iLast;i++){
+    if(daily.min[i]!=null && daily.max[i]!=null) amps.push(daily.max[i]-daily.min[i]);
+  }
+  const avgAmp = amps.length ? (amps.reduce((a,b)=>a+b,0)/amps.length) : null;
+
+  let comp = '';
+  if(amp!=null && avgAmp!=null){
+    const diff = amp - avgAmp;
+    const abs = Math.abs(diff);
+    const dir = diff >= 0 ? 'superior' : 'inferior';
+    comp = `, ${abs.toFixed(1)}°C ${dir} à média dos últimos ${days} dias`;
+  }
+
+  // frase final
+  el.innerHTML = `Hoje: <strong>${__format1(tMin)}°C</strong> (mín) — <strong>${__format1(tMax)}°C</strong> (máx). `
+              + `Amplitude térmica: <strong>${amp==null?'—':amp.toFixed(1)}°C</strong>${comp}.`;
+}
+
+function __renderDailyChart(payload, days){
+  const canvas = document.getElementById('tempDailyChart');
   if(!canvas) return;
-  const ctx = canvas.getContext("2d");
-  if(graficoTemp) graficoTemp.destroy();
+  const ctx = canvas.getContext('2d');
 
-  graficoTemp = new Chart(ctx,{
-    type:"line",
-    data:{
-      labels,
-      datasets:[
-        {label:"Máx (°C)", data:max, tension:.3},
-        {label:"Média (°C)", data:media, tension:.3},
-        {label:"Mín (°C)", data:min, tension:.3}
+  if(__tempDailyChart) __tempDailyChart.destroy();
+
+  __tempDailyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: payload.labels,
+      datasets: [
+        { label: 'Máx (°C)', data: payload.max, tension: 0.25 },
+        { label: 'Média (°C)', data: payload.avg, tension: 0.25 },
+        { label: 'Mín (°C)', data: payload.min, tension: 0.25 }
       ]
     },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      interaction:{mode:"index",intersect:false},
-      scales:{
-        y:{title:{display:true,text:"°C"}}
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        y: { title: { display: true, text: '°C' } }
+      }
+    }
+  });
+
+  __buildDailyInsight(days, payload);
+}
+
+async function __fetchDailySummaries(){
+  const cfg = (window.WU_CONFIG || {});
+  if(!cfg.stationId || !cfg.apiKey) throw new Error('WU_CONFIG missing');
+
+  const base = 'https://api.weather.com/v2/pws/dailysummary/';
+  const common = `?stationId=${encodeURIComponent(cfg.stationId)}&format=json&units=m&numericPrecision=decimal&apiKey=${encodeURIComponent(cfg.apiKey)}`;
+
+  // tenta 30 dias (mais flexível). se falhar, tenta 7 dias.
+  try{
+    const r30 = await fetch(base + '30day' + common);
+    if(!r30.ok) throw new Error('30day not ok');
+    const d30 = await r30.json();
+    const sums = Array.isArray(d30?.summaries) ? d30.summaries : [];
+    if(!sums.length) throw new Error('30day empty');
+    return { days: 30, summaries: sums };
+  }catch(e){
+    const r7 = await fetch(base + '7day' + common);
+    if(!r7.ok) throw new Error('7day not ok');
+    const d7 = await r7.json();
+    const sums = Array.isArray(d7?.summaries) ? d7.summaries : [];
+    if(!sums.length) throw new Error('7day empty');
+    return { days: 7, summaries: sums };
+  }
+}
+
+function __prepareDailyPayload(summaries, daysWanted){
+  const byEpoch = summaries.slice().sort((a,b)=>(a.epoch||0)-(b.epoch||0));
+  const slice = byEpoch.slice(-daysWanted);
+
+  const labels = [];
+  const min = [];
+  const max = [];
+  const avg = [];
+
+  slice.forEach(s=>{
+    const m = s.metric || {};
+    const low = __safeNum(m.tempLow);
+    const high = __safeNum(m.tempHigh);
+
+    // label: dia/mes (curto)
+    const dt = new Date(s.obsTimeLocal || s.obsTimeUtc || (s.epoch? s.epoch*1000 : Date.now()));
+    labels.push(dt.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit' }));
+
+    min.push(low);
+    max.push(high);
+
+    const mid = (low!=null && high!=null) ? (low+high)/2 : null;
+    avg.push(mid==null ? null : Number(mid.toFixed(1)));
+  });
+
+  return { labels, min, max, avg };
+}
+
+async function loadTempDaily(daysWanted=7){
+  const note = document.getElementById('tempDailyNote');
+  const insight = document.getElementById('tempDailyInsight');
+  if(note) note.textContent = 'A carregar…';
+  if(insight) insight.textContent = 'A carregar…';
+
+  try{
+    const { summaries } = await __fetchDailySummaries();
+    const payload = __prepareDailyPayload(summaries, daysWanted);
+    __renderDailyChart(payload, daysWanted);
+    if(note) note.textContent = 'Fonte: Estação meteorológica da EB de Manhente (Weather Underground).';
+  }catch(e){
+    if(insight) insight.textContent = 'Histórico diário indisponível.';
+    if(note) note.textContent = 'Não foi possível obter dados da estação.';
+  }
+}
+
+function __renderHourlyChart(labels, temps){
+  const canvas = document.getElementById('tempHourlyChart');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  if(__tempHourlyChart) __tempHourlyChart.destroy();
+
+  __tempHourlyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Temperatura (°C)', data: temps, tension: 0.25 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { display: true } },
+      scales: {
+        y: { title: { display: true, text: '°C' } },
+        x: { ticks: { maxRotation: 0, autoSkip: true } }
       }
     }
   });
 }
 
-(function(){
-  const noteEl = document.getElementById("nota-temp-diaria");
-  const cfg = (window.WU_CONFIG || {});
-  if(!cfg.stationId || !cfg.apiKey){
-    if(noteEl) noteEl.innerText = "Configuração da estação indisponível (config.js).";
-    return;
-  }
+async function loadTempHourly(){
+  const el = document.getElementById('tempHourlyNote');
+  if(el) el.textContent = 'A carregar…';
 
-  const url = "https://api.weather.com/v2/pws/dailysummary/7day"
-    + "?stationId=" + encodeURIComponent(cfg.stationId)
-    + "&format=json&units=m&numericPrecision=decimal"
-    + "&apiKey=" + encodeURIComponent(cfg.apiKey);
+  try{
+    const cfg = (window.WU_CONFIG || {});
+    if(!cfg.stationId || !cfg.apiKey) throw new Error('WU_CONFIG missing');
 
-  fetch(url)
-    .then(r => r.ok ? r.json() : Promise.reject(r.status))
-    .then(d => {
-      const dias = Array.isArray(d?.summaries) ? d.summaries : [];
-      if(!dias.length) throw "sem dados";
+    const url = 'https://api.weather.com/v2/pws/observations/all/1day'
+      + '?stationId=' + encodeURIComponent(cfg.stationId)
+      + '&format=json&units=m&numericPrecision=decimal'
+      + '&apiKey=' + encodeURIComponent(cfg.apiKey);
 
-      const labels=[], min=[], max=[], media=[];
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('obs 1day not ok');
+    const d = await r.json();
 
-      dias.slice(-7).forEach(x => {
-        const dt = new Date(x.obsTimeLocal);
-        labels.push(dt.toLocaleDateString("pt-PT",{weekday:"short"}));
+    const obs = Array.isArray(d?.observations) ? d.observations : [];
+    if(!obs.length) throw new Error('obs empty');
 
-        const lo = Number(x?.metric?.tempLow);
-        const hi = Number(x?.metric?.tempHigh);
-        min.push(Number.isFinite(lo) ? lo : null);
-        max.push(Number.isFinite(hi) ? hi : null);
-        media.push((Number.isFinite(lo) && Number.isFinite(hi)) ? Number(((lo+hi)/2).toFixed(1)) : null);
-      });
-
-      criarGraficoTemp(labels, min, max, media);
-      if(noteEl) noteEl.innerText = "Fonte: Estação meteorológica da EB de Manhente (Weather Underground).";
-    })
-    .catch(() => {
-      if(noteEl) noteEl.innerText = "Histórico diário indisponível para o gráfico.";
+    const now = new Date();
+    const rowsToday = obs.filter(o => {
+      const t = new Date(o.obsTimeLocal || o.obsTimeUtc || (o.epoch? o.epoch*1000 : NaN));
+      return !Number.isNaN(t.getTime()) && __sameDayLocal(t, now);
     });
+
+    const rows = rowsToday.length ? rowsToday : obs;
+
+    // reduzir para 1 ponto a cada ~30 min (para não ficar super carregado)
+    const labels = [];
+    const temps = [];
+    let lastKeep = 0
+
+    rows.sort((a,b)=>(a.epoch||0)-(b.epoch||0)).forEach(o=>{
+      const t = new Date(o.obsTimeLocal || o.obsTimeUtc || (o.epoch? o.epoch*1000 : NaN));
+      const temp = __safeNum((o.metric||{}).temp);
+      if(Number.isNaN(t.getTime()) || temp==null) return;
+
+      const ms = t.getTime();
+      if(ms - lastKeep < 25*60*1000) return; // ~25 min
+      lastKeep = ms;
+
+      labels.push(t.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}));
+      temps.push(temp);
+    });
+
+    if(labels.length < 2) throw new Error('not enough hourly points');
+
+    __renderHourlyChart(labels, temps);
+    if(el) el.textContent = 'Fonte: Estação meteorológica (observações do dia).';
+  }catch(e){
+    if(el) el.textContent = 'Histórico horário indisponível neste momento.';
+  }
+}
+
+// botões 7/14/30
+(function(){
+  const btns = document.querySelectorAll('.btn-periodo');
+  if(!btns.length) return;
+
+  btns.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const days = Number(b.dataset.days || 7);
+      __setActivePeriodo(days);
+      loadTempDaily(days);
+    });
+  });
+
+  // default
+  __setActivePeriodo(7);
+  loadTempDaily(7);
+  loadTempHourly();
 })();
+
 </script>
 
 </body>
