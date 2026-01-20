@@ -1262,6 +1262,9 @@ carregarSismosMundoRelevantes();
 // =======================
 let __tempDailyChart = null;
 let __tempHourlyChart = null;
+// cache para evitar múltiplos fetch e para sabermos quantos dias o endpoint devolve
+let __dailySummariesCache = null;
+let __dailySummariesMeta = { endpoint: null, count: 0 };
 
 function __setActivePeriodo(days){
   document.querySelectorAll('.btn-periodo').forEach(b=>{
@@ -1356,6 +1359,8 @@ function __renderDailyChart(payload, days){
 }
 
 async function __fetchDailySummaries(){
+  if(__dailySummariesCache) return { summaries: __dailySummariesCache, meta: __dailySummariesMeta };
+
   const cfg = (window.WU_CONFIG || {});
   if(!cfg.stationId || !cfg.apiKey) throw new Error('WU_CONFIG missing');
 
@@ -1369,14 +1374,20 @@ async function __fetchDailySummaries(){
     const d30 = await r30.json();
     const sums = Array.isArray(d30?.summaries) ? d30.summaries : [];
     if(!sums.length) throw new Error('30day empty');
-    return { days: 30, summaries: sums };
+
+    __dailySummariesCache = sums;
+    __dailySummariesMeta = { endpoint: '30day', count: sums.length };
+    return { summaries: sums, meta: __dailySummariesMeta };
   }catch(e){
     const r7 = await fetch(base + '7day' + common);
     if(!r7.ok) throw new Error('7day not ok');
     const d7 = await r7.json();
     const sums = Array.isArray(d7?.summaries) ? d7.summaries : [];
     if(!sums.length) throw new Error('7day empty');
-    return { days: 7, summaries: sums };
+
+    __dailySummariesCache = sums;
+    __dailySummariesMeta = { endpoint: '7day', count: sums.length };
+    return { summaries: sums, meta: __dailySummariesMeta };
   }
 }
 
@@ -1408,6 +1419,89 @@ function __prepareDailyPayload(summaries, daysWanted){
   return { labels, min, max, avg };
 }
 
+
+function __fmtYYYYMMDD(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}${m}${dd}`;
+}
+
+async function __fetchHistoryForDate(dateYYYYMMDD){
+  const cfg = (window.WU_CONFIG || {});
+  if(!cfg.stationId || !cfg.apiKey) throw new Error('WU_CONFIG missing');
+
+  const url = 'https://api.weather.com/v2/pws/history/all'
+    + '?stationId=' + encodeURIComponent(cfg.stationId)
+    + '&format=json&units=m&numericPrecision=decimal'
+    + '&date=' + encodeURIComponent(dateYYYYMMDD)
+    + '&apiKey=' + encodeURIComponent(cfg.apiKey);
+
+  const r = await fetch(url);
+  if(!r.ok) throw new Error('history not ok');
+  const d = await r.json();
+  const obs = Array.isArray(d?.observations) ? d.observations : [];
+  return obs;
+}
+
+function __tempsFromObs(obs){
+  const temps = [];
+  obs.forEach(o=>{
+    const m = o.metric || o.imperial || {};
+    const t = __safeNum(m.temp ?? o.temp);
+    if(t!=null) temps.push(t);
+  });
+  return temps;
+}
+
+async function __buildDailyFromHistory(daysWanted){
+  // Faz N pedidos (1 por dia) e calcula min/max/média.
+  // Limite de concorrência simples para não martelar o endpoint.
+  const today = new Date();
+  const dates = [];
+  for(let i=daysWanted-1;i>=0;i--){
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    dates.push(d);
+  }
+
+  const labels = [];
+  const min = [];
+  const max = [];
+  const avg = [];
+
+  const concurrency = 3;
+  let cursor = 0;
+
+  async function worker(){
+    while(cursor < dates.length){
+      const myIdx = cursor++;
+      const d = dates[myIdx];
+      const ymd = __fmtYYYYMMDD(d);
+      try{
+        const obs = await __fetchHistoryForDate(ymd);
+        const temps = __tempsFromObs(obs);
+        labels[myIdx] = d.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit' });
+        if(temps.length){
+          const mn = Math.min(...temps);
+          const mx = Math.max(...temps);
+          min[myIdx] = Number(mn.toFixed(1));
+          max[myIdx] = Number(mx.toFixed(1));
+          avg[myIdx] = Number(((mn+mx)/2).toFixed(1));
+        }else{
+          min[myIdx] = null; max[myIdx] = null; avg[myIdx] = null;
+        }
+      }catch(e){
+        labels[myIdx] = d.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit' });
+        min[myIdx] = null; max[myIdx] = null; avg[myIdx] = null;
+      }
+    }
+  }
+
+  await Promise.all(Array.from({length: concurrency}, worker));
+  return { labels, min, max, avg };
+}
+
 async function loadTempDaily(daysWanted=7){
   const note = document.getElementById('tempDailyNote');
   const insight = document.getElementById('tempDailyInsight');
@@ -1415,15 +1509,33 @@ async function loadTempDaily(daysWanted=7){
   if(insight) insight.textContent = 'A carregar…';
 
   try{
-    const { summaries } = await __fetchDailySummaries();
-    const payload = __prepareDailyPayload(summaries, daysWanted);
+    const { summaries, meta } = await __fetchDailySummaries();
+    const endpoint = (meta && meta.endpoint) ? meta.endpoint : "?";
+    const available = Array.isArray(summaries) ? summaries.length : 0;
+
+    // Caso comum: o endpoint devolve dias suficientes (ex.: 7 dias)
+    if(daysWanted <= available){
+      __setActivePeriodo(daysWanted);
+      if(note) note.textContent = `Fonte: Estação meteorológica da EB de Manhente (Weather Underground — ${endpoint}).`;
+      const payload = __prepareDailyPayload(summaries, daysWanted);
+      __renderDailyChart(payload, daysWanted);
+      return;
+    }
+
+    // Se pedires 14/30 e o endpoint de resumo só der 7 dias, construímos o diário via /history/all (1 pedido por dia)
+    __setActivePeriodo(daysWanted);
+    if(note) note.textContent = `A carregar ${daysWanted} dias a partir do histórico da estação…`;
+
+    const payload = await __buildDailyFromHistory(daysWanted);
     __renderDailyChart(payload, daysWanted);
-    if(note) note.textContent = 'Fonte: Estação meteorológica da EB de Manhente (Weather Underground).';
+
+    if(note) note.textContent = `Fonte: Estação meteorológica da EB de Manhente (Weather Underground — history/all, ${daysWanted} dias).`;
   }catch(e){
     if(insight) insight.textContent = 'Histórico diário indisponível.';
     if(note) note.textContent = 'Não foi possível obter dados da estação.';
   }
 }
+
 
 function __renderHourlyChart(labels, temps){
   const canvas = document.getElementById('tempHourlyChart');
