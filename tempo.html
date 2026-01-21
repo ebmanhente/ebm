@@ -145,13 +145,13 @@ main{
 }
 
 .logo-bora{
-  width: clamp(140px, 35vw, 260px);
+  width: clamp(260px, 95vw, 680px); /* mantém o comprimento */
   height: auto;
-  margin: 18px auto;
+  max-height: 90px;               /* torna a tira mais estreita */
+  object-fit: contain;
+  margin: 25px auto;
   display: block;
-  transition: transform .2s ease, opacity .2s ease;
 }
-
 @media (max-width:600px){
   .logo-bora{
     max-width:140px; /* ainda bem visível no telemóvel */
@@ -396,7 +396,7 @@ details summary::marker {
 <div id="legenda">
   <strong>EB de Manhente</strong>
   <br><br>
-  Com o apoio da Associação<br>
+  Com o apoio:<br>
   <a href="https://borambientar.pt/" target="_blank" rel="noopener noreferrer">
     <img src="logo-bora-parceiros.jpeg" alt="BORA AMBIENTAR – Parceiros" class="logo-bora">
   </a>
