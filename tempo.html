@@ -145,19 +145,20 @@ main{
 }
 
 .logo-bora{
-  width: clamp(260px, 95vw, 680px); /* mantém o comprimento */
+  width: clamp(280px, 95vw, 680px);
   height: auto;
-  max-height: 90px;               /* torna a tira mais estreita */
+  max-height: 90px;        /* desktop */
   object-fit: contain;
   margin: 25px auto;
   display: block;
 }
-@media (max-width:600px){
+
+/* TELEFÓVEL */
+@media (max-width: 600px){
   .logo-bora{
-    max-width:140px; /* ainda bem visível no telemóvel */
+    max-height: 130px;     /* mais alto → texto legível */
   }
 }
-
 .logo-bora:hover{
   transform:scale(1.05);
   opacity:.9;
