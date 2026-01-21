@@ -156,9 +156,11 @@ main{
 /* TELEFÓVEL */
 @media (max-width: 600px){
   .logo-bora{
-    max-height: 110px;     /* equilíbrio ideal */
+    width: clamp(240px, 80vw, 360px); /* encurta a tira */
+    max-height: 95px;                /* mantém legível */
   }
 }
+
 .logo-bora:hover{
   transform:scale(1.05);
   opacity:.9;
