@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>AGRUPAMENTO DE ESCOLAS ALCAIDES DE FARIA - Horários da escola</title>
+		<meta name="Description" content="" />
+		<meta name="Keywords" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<link rel="stylesheet" type="text/css" href="dcsStyles.css" media="screen" />
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="header">
+			    <h1>AGRUPAMENTO DE ESCOLAS ALCAIDES DE FARIA</h1>
+			    <h2>Horários da escola - 2026 - 2027 </h2>
+	  		</div>
+		  	<div id="menu"> 
+			<a href="javascript:history.back()">Voltar à Lista</a>
+				<div id="pdflink">
+					<a href="#" id="PDFLINK" name="PDFLINK">
+					<img src="pdf_icon.gif">
+					</a>
+				</div>
+			</div>
+			<div id="content">
+				<center>
+				  <img id="HORARIO" name="HORARIO"> 
+				</center>				
+			</div>
+  			<div id="footer">
+				DCS-Horários - Lideres em Horários Escolares -&nbsp 
+				<a href="http://www.dcs.pt">www.dcs.pt</a>
+			</div>
+		</div>
+		<SCRIPT LANGUAGE="javascript">
+			istr = (new String(document.location.search)).slice(1);
+			document.getElementById("HORARIO").src  = istr + ".png";
+			document.getElementById("PDFLINK").href = istr + ".pdf";
+		</SCRIPT>
+	</body>
+</html>

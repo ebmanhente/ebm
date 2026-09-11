@@ -1,0 +1,271 @@
+/***********************************************************************************************/
+/***********************************************************************************************/
+/***********                                                                        ************/
+/*********** Folha de estilos para a Exportação para HTML do DCS-Horários           ************/
+/***********                                                                        ************/
+/***********************************************************************************************/
+/***********************************************************************************************/
+/***********                                                                        ************/
+/*********** NOTA: A edição manual deste ficheiro poderá levar a resultados         ************/
+/*********** inesperados no aspecto da página de internet!                          ************/
+/***********                                                                        ************/
+/***********************************************************************************************/
+/***********************************************************************************************/
+
+
+/* Formatação geral para toda a página */
+ * {
+    padding: 0;
+    margin: 0;
+}
+
+/* Formatação geral para o corpo da página */
+ body {
+    font: .8em "Open Sans",Arial,sans-serif;
+    background-image: url(background.gif);
+    background-repeat: repeat;
+}
+
+/* Formatação geral das hiperligações */
+ a {
+    text-decoration: none;
+    color: #383838;
+}
+
+/* Formatação geral das hiperligações (quando o rato se encontra por cima destas) */
+ a:hover {
+    color: #00a8ff;
+}
+
+/* Formatação geral para o destaque de linha h2 */
+ h2 {
+    font-size: 17px;
+    color: #31799F;
+    padding: 0 0 5px 0;
+}
+
+/* Formatação para o bloco principal de dados da página */
+ #wrap {
+    margin: 20px auto;
+    width: 900px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* Formatação para o bloco principal de dados da página */
+ #header {
+    text-align: center;
+}
+
+/* Formatação do cabeçalho dos dados (NOME_ESCOLA) */
+ #header h1 {
+    line-height: 65px;
+    font-size: 25px;
+    color: #0099e8;
+}
+
+/* Formatação do cabeçalho dos dados (NOME_ESCOLA, mas com hiperligação) */
+ #header h1 a {
+    color: #31799F;
+    text-decoration: none;
+}
+
+/* Formatação do cabeçalho dos dados (HORÁRIOS ANO LECTIVO - ANO_LECTIVO) */
+ #header h2 {
+    padding-top: 5px;
+    background-color: #d2d2d2;
+    line-height: 13px;
+    font-size: 13px;
+    color: #fff;
+}
+
+
+
+
+/* Formatação do conteúdo dos dados (LISTA DE TURMAS, PROFESSORES E SALAS) */
+ #content {
+    text-align: left;
+    margin-top: 35px;
+    padding: 10px;
+    font-size: 13px;
+}
+
+
+
+
+/* Formatação da única célula da tabela superior dos dados a exibir (PROFESSORES, TURMAS, SALAS) */
+#topTable {
+    text-align: center;
+    background-color: rgba(63,180,234,1);
+    line-height: 50px;
+}
+
+#topTable h2 {
+    color: white;
+}
+
+
+
+
+/* Formatação da tabela inferior dos dados a exibir (Lista de PROFESSORES, TURMAS, SALAS) */
+ #dataTable {
+    padding-top: 20px;
+    text-align: left;
+}
+
+/* Tabela injetada com uma lista (Lista de PROFESSORES, TURMAS, SALAS) */
+#dataTable table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#dataTable table tr{
+    background-color: #f3f3f3;
+    line-height: 40px;
+}
+
+#dataTable table tr:nth-child(even){
+    background-color: #fcfcfc;
+}
+
+#dataTable table td:first-child{
+    padding-left: 20px;
+    width: 10%;
+}
+
+
+
+
+
+/* Formatação do menu (PROFESSORES, TURMAS, SALAS) */
+ #menu {
+    position: relative;
+    margin-left: auto; 
+    margin-right: 0px;
+    width: 150px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 20px;
+    font-weight: bold;
+    background-color: #f8f8f8;
+}
+
+/* Formatação das hiperligações dos items do menu (PROFESSORES, TURMAS, SALAS) */
+ #menu a {
+    color: #3B85CA;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+/* Formatação das hiperligações dos items do menu, quando o rato se encontra por cima destas */
+ #menu a:hover {
+    color: #000;
+}
+
+ #pdflink {
+    position: relative;
+    margin: 0;
+    float: right;
+    text-align: right;
+    font-size: 10px;
+}
+ #pdflink a{
+    padding: 0;
+}
+
+
+
+
+/* Formatação da linha perto do rodapé com a data de exportação */
+ #label {
+    clear: both;
+    text-align: center;
+    font-size: 12px;
+    padding-top: 30px;
+    padding-bottom: 5px;
+}
+
+
+
+
+
+/* Formatação da informação do rodapé da página */
+ #footer {
+    margin-top: 25px;
+    clear: both;
+    text-align: center;
+    color: #3faee8;
+    font-size: 10px;
+    background-color: #f3f3f3;
+    padding: 4px;
+}
+
+/* Formatação das hiperligações no rodapé da página */
+ #footer a {
+    color: #e8a63f;
+    text-decoration: none;
+}
+
+
+
+
+
+/**************************/
+/* Formatação das tabelas */
+/**************************/
+ #dcsTable{
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 700px;
+    margin: 25px 0 0 0;
+}
+
+ #rowBg1{
+    background-color: #fcfcfc;
+}
+
+ #rowBg2{
+    background-color: #f3f3f3;
+}
+
+
+
+#colL, #colR, #colC, #colLul, #colRul, #colCul, #colLtl, #colRtl, #colCtl, #colHL, #colHR, #colHC {
+    color: #349bd1;
+    padding: 1px 15px 1px 10px;
+}
+
+#colLul, #colRul, #colCul {
+    border-bottom-width: 1px;
+    border-bottom-color: #c2c2c2;
+    border-bottom-style: solid;
+}
+
+#colLtl, #colRtl, #colCtl {
+    border-top-width: 1px;
+    border-top-color: #c2c2c2;
+    border-top-style: solid;
+}
+
+#colHL, #colHR, #colHC {
+    background-color: #e5e5e5;
+    border-top-width: 1px;
+    border-top-color: #c2c2c2;
+    border-top-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #c2c2c2;
+    border-bottom-style: solid;
+}
+
+ #colL, #colLul, #colLtl, #colHL{
+    text-align: left;
+}
+
+ #colR, #colRul, #colRtl, #colHR{
+    text-align: right;
+}
+
+ #colC, #colCul,  #colCtl, #colHC{
+    text-align: center;
+}
