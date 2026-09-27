@@ -400,6 +400,73 @@ footer img{max-width:260px;}
   .grid > div{ order:2; }
 }
 
+
+@media(max-width:600px){
+  .imagem-escola-wrap{padding:7px;margin-bottom:18px;}
+  .imagem-escola{max-height:180px;}
+}
+
+
+
+
+/* APRESENTAÇÃO + IMAGEM DA ESCOLA */
+.apresentacao-topo{
+  display:grid;
+  grid-template-columns:minmax(0,1.65fr) minmax(190px,.85fr);
+  gap:22px;
+  align-items:center;
+}
+.texto-apresentacao h2{margin-top:0}
+.imagem-escola-wrap{
+  background:#fff;
+  border-radius:16px;
+  padding:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.10);
+  text-align:center;
+}
+.imagem-escola{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:300px;
+  object-fit:contain;
+  border-radius:10px;
+}
+@media(max-width:900px){
+  .apresentacao-topo{
+    grid-template-columns:1fr;
+  }
+  .imagem-escola-wrap{
+    max-width:430px;
+    margin:5px auto 0;
+  }
+}
+
+
+/* APRESENTAÇÃO DA ESCOLA */
+.apresentacao-escola{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.imagem-escola-wrap{
+  width:100%;
+  background:white;
+  border-radius:16px;
+  padding:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.10);
+}
+.imagem-escola{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:360px;
+  object-fit:cover;
+  object-position:center;
+  border-radius:10px;
+}
+.texto-apresentacao h2{margin-top:0}
+
 </style>
 
 <script async
@@ -422,59 +489,66 @@ footer img{max-width:260px;}
 </header>
 
 <main>
-
 <div class="grid">
 
   <!-- APRESENTAÇÃO DA ESCOLA -->
   <section>
-    <h2>Sobre a Escola</h2>
-
-    <p class="sobre-intro">
-      A <strong>Escola Básica de Manhente</strong> é um estabelecimento de ensino que assegura a educação
-      do <strong>1.º ao 9.º ano de escolaridade</strong>, integrando o
-      <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
-    </p>
-
-    <p class="sobre-intro sobre-intro-2">
-      A escola acolhe alunos do <strong>1.º, 2.º e 3.º ciclos do ensino básico</strong>,
-      garantindo a continuidade do percurso educativo num único espaço.
-    </p>
-
-    <button class="ler-mais" id="btn-ler-mais" type="button" aria-expanded="false" aria-controls="sobre-detalhe">
-      Ler mais
-    </button>
-
-    <div id="sobre-detalhe" class="sobre-detalhe" aria-hidden="true">
-      <div class="sobre-caixa">
-        <strong>Localização e comunidade educativa</strong><br>
-        Localizada na freguesia de <strong>Manhente</strong>, no concelho de <strong>Barcelos</strong>,
-        a EB de Manhente serve uma comunidade educativa alargada, recebendo alunos das freguesias de
-        Manhente, Galegos Santa Maria, Galegos São Martinho, Ucha, Areias de São Vicente, Lama, Oliveira, entre outros.
+    <div class="apresentacao-escola">
+      <div class="imagem-escola-wrap">
+        <img src="eb-manhente.jpg" class="imagem-escola" alt="Escola Básica de Manhente">
       </div>
 
-      <p>Freguesias abrangidas (principais):</p>
-      <ul class="sobre-lista">
-        <li>Manhente</li>
-        <li>Galegos Santa Maria</li>
-        <li>Galegos São Martinho</li>
-        <li>Ucha</li>
-        <li>Areias de São Vicente</li>
-        <li>Lama</li>
-        <li>Oliveira</li>
-      </ul>
+      <div class="texto-apresentacao">
+        <h2>Sobre a Escola</h2>
 
-      <p style="margin-top:15px;">
-        Em estreita articulação com as famílias e parceiros educativos, a escola promove uma
-        <strong>educação inclusiva</strong>, orientada para o <strong>sucesso escolar</strong>,
-        o <strong>desenvolvimento integral dos alunos</strong> e a sua preparação para os desafios futuros.
-      </p>
+        <p class="sobre-intro">
+          A <strong>Escola Básica de Manhente</strong> é um estabelecimento de ensino que assegura a educação
+          do <strong>1.º ao 9.º ano de escolaridade</strong>, integrando o
+          <strong>Agrupamento de Escolas Alcaides de Faria</strong>.
+        </p>
+
+        <p class="sobre-intro sobre-intro-2">
+          A escola acolhe alunos do <strong>1.º, 2.º e 3.º ciclos do ensino básico</strong>,
+          garantindo a continuidade do percurso educativo num único espaço.
+        </p>
+
+        <button class="ler-mais" id="btn-ler-mais" type="button" aria-expanded="false" aria-controls="sobre-detalhe">
+          Ler mais
+        </button>
+
+        <div id="sobre-detalhe" class="sobre-detalhe" aria-hidden="true">
+          <div class="sobre-caixa">
+            <strong>Localização e comunidade educativa</strong><br>
+            Localizada na freguesia de <strong>Manhente</strong>, no concelho de <strong>Barcelos</strong>,
+            a EB de Manhente serve uma comunidade educativa alargada, recebendo alunos das freguesias de
+            Manhente, Galegos Santa Maria, Galegos São Martinho, Ucha, Areias de São Vicente, Lama, Oliveira, entre outros.
+          </div>
+
+          <p>Freguesias abrangidas (principais):</p>
+          <ul class="sobre-lista">
+            <li>Manhente</li>
+            <li>Galegos Santa Maria</li>
+            <li>Galegos São Martinho</li>
+            <li>Ucha</li>
+            <li>Areias de São Vicente</li>
+            <li>Lama</li>
+            <li>Oliveira</li>
+          </ul>
+
+          <p style="margin-top:15px;">
+            Em estreita articulação com as famílias e parceiros educativos, a escola promove uma
+            <strong>educação inclusiva</strong>, orientada para o <strong>sucesso escolar</strong>,
+            o <strong>desenvolvimento integral dos alunos</strong> e a sua preparação para os desafios futuros.
+          </p>
+        </div>
+
+        <hr class="sobre-separador">
+
+        <p><strong>📍 Morada:</strong><br>Praceta Manuel Maria Barbosa du Bocage</p>
+        <p><strong>📞 Telefone:</strong> 253 849 410<br>
+           <strong>✉️ Email:</strong> geral@aeaf.edu.pt</p>
+      </div>
     </div>
-
-    <hr class="sobre-separador">
-
-    <p><strong>📍 Morada:</strong><br>Praceta Manuel Maria Barbosa du Bocage</p>
-    <p><strong>📞 Telefone:</strong> 253 849 410<br>
-       <strong>✉️ Email:</strong> geral@aeaf.edu.pt</p>
   </section>
 
   <!-- COLUNA DIREITA -->
@@ -498,7 +572,6 @@ footer img{max-width:260px;}
 
     <a href="tempo.html">Ver página do tempo completo</a>
   </div>
-
     <!-- BOTÕES -->
     <div class="botoes">
       <a class="botao inovar"
@@ -543,6 +616,7 @@ footer img{max-width:260px;}
           <small class="bema-breve"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> Brevemente</small>
         </div>
       </div>
+    </div>
     </div>
 
   </div>
