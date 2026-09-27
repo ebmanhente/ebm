@@ -30,9 +30,9 @@ main{max-width:1050px;margin:36px auto;padding:0 18px}
 .breve{display:inline-flex;align-items:center;gap:7px;margin-top:15px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);font-weight:700;font-size:.82rem}
 .voltar{display:inline-flex;align-items:center;gap:8px;margin-top:25px;color:var(--verde);text-decoration:none;font-weight:700}
 .voltar:hover{text-decoration:underline}
-.club-list{display:flex;justify-content:center;gap:22px;margin-top:26px}
-.club{width:min(100%,680px);background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.09);text-align:center;margin:0 auto}
-.club img{display:block;width:100%;max-width:680px;height:auto;margin:0 auto}
+.club-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:26px;align-items:start}
+.club{width:100%;background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.09);text-align:center;margin:0 auto}
+.club img{display:block;width:100%;max-width:100%;height:auto;margin:0 auto}
 .club-info{padding:20px}
 .club-info h3{margin:0;color:var(--verde);font-size:1.45rem}
 .club-info p{line-height:1.5;margin:9px 0 0}
@@ -42,7 +42,7 @@ main{max-width:1050px;margin:36px auto;padding:0 18px}
 .notice h2{color:var(--verde);margin:18px 0 8px}
 .notice p{line-height:1.6;max-width:650px;margin:auto}
 footer{text-align:center;margin:38px 0 24px;color:#4b5563}
-@media(max-width:700px){.menu{grid-template-columns:1fr}.club-list{display:flex}.club{width:100%}.card{min-height:190px}main{margin:24px auto}.hero{padding:28px 18px}}
+@media(max-width:700px){.menu{grid-template-columns:1fr}.club-list{grid-template-columns:1fr;gap:26px}.club{width:100%;border-radius:18px}.club img{width:100%;max-width:100%}.club-info{padding:16px 14px}.club-info h3{font-size:1.3rem}.club-info p{font-size:.95rem}.badge{font-size:.78rem}.card{min-height:190px}main{margin:24px auto;padding:0 12px}.hero{padding:28px 18px}}
 .slogan-img{max-width:280px;width:100%;height:auto;display:block;margin:0 auto;}\n</style>
 </head>
 <body>
@@ -66,9 +66,9 @@ footer{text-align:center;margin:38px 0 24px;color:#4b5563}
 </article>
 
 <article class="club">
-<img src="Parlamento_Jovem.png" alt="Cartaz do Parlamento Jovem">
+<img src="Parlamento_Jovem.png" alt="Cartaz do Parlamento dos Jovens">
 <div class="club-info">
-<h3>Parlamento Jovem</h3>
+<h3>Parlamento dos Jovens</h3>
 <p>Um espaço de participação, debate e cidadania, onde os alunos podem apresentar ideias, discutir temas e dar voz às suas opiniões.</p>
 <span class="badge"><i class="fa-solid fa-landmark"></i> Coordenação: Professora Julieta Gomes</span>
 </div>
