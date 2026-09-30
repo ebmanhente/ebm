@@ -3,60 +3,213 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Desporto Escolar</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<title>Desporto Escolar 2026/2027 | EB de Manhente</title>
+<meta name="description" content="Desporto Escolar 2026/2027 da EB de Manhente — modalidades, escalões, responsáveis e horários dos treinos.">
 <style>
-:root{--verde:#166534;--verde2:#15803d;--verde-claro:#dcfce7;--lima:#84cc16;--azul:#0ea5e9;--texto:#1f2933}
+:root{
+  --verde:#8fb44f;
+  --verde-escuro:#52752b;
+  --verde-claro:#eef5e4;
+  --cinza:#f5f5f5;
+  --texto:#202020;
+  --linha:#d6d6d6;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:'Montserrat',Arial,sans-serif;background:linear-gradient(180deg,#f0fdf4 0%,#fff 55%,#f0fdf4 100%);color:var(--texto)}
-header{background:linear-gradient(135deg,#166534,#15803d);color:white;padding:26px 20px;box-shadow:0 5px 18px rgba(0,0,0,.12)}
-.header-content{max-width:1050px;margin:auto;display:flex;align-items:center;gap:18px}
-.header-content img{width:72px;background:white;border-radius:50%;padding:5px}
-h1{margin:0;font-size:clamp(1.5rem,4vw,2.25rem)}
-.header-sub{margin:5px 0 0;opacity:.9}
-main{max-width:1050px;margin:36px auto;padding:0 18px}
-.hero{text-align:center;background:white;border-radius:22px;padding:34px 24px;box-shadow:0 8px 28px rgba(0,0,0,.08)}
-.hero h2{margin:0;color:var(--verde);font-size:clamp(1.7rem,4vw,2.4rem)}
-.hero p{margin:12px auto 0;max-width:720px;line-height:1.6}
-.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:26px}
-.card{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px;padding:28px;border-radius:20px;text-decoration:none;color:white;box-shadow:0 8px 22px rgba(0,0,0,.12);transition:.22s ease;overflow:hidden}
-.card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(0,0,0,.16)}
-.card i{font-size:3rem;margin-bottom:14px}
-.card h3{margin:0;font-size:1.45rem}
-.card p{margin:9px 0 0;text-align:center;opacity:.95;line-height:1.45}
-.desporto{background:linear-gradient(135deg,#0284c7,#0369a1)}
-.clubes{background:linear-gradient(135deg,#84cc16,#4d7c0f)}
-.breve{display:inline-flex;align-items:center;gap:7px;margin-top:15px;padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);font-weight:700;font-size:.82rem}
-.voltar{display:inline-flex;align-items:center;gap:8px;margin-top:25px;color:var(--verde);text-decoration:none;font-weight:700}
-.voltar:hover{text-decoration:underline}
-.club-list{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:26px}
-.club{background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.09)}
-.club img{display:block;width:100%;height:auto}
-.club-info{padding:20px}
-.club-info h3{margin:0;color:var(--verde);font-size:1.45rem}
-.club-info p{line-height:1.5;margin:9px 0 0}
-.badge{display:inline-block;margin-top:13px;padding:6px 10px;border-radius:999px;background:var(--verde-claro);color:var(--verde);font-weight:800;font-size:.82rem}
-.notice{background:white;border-radius:22px;padding:42px 24px;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.08)}
-.notice i{font-size:4rem;color:#0284c7}
-.notice h2{color:var(--verde);margin:18px 0 8px}
-.notice p{line-height:1.6;max-width:650px;margin:auto}
-footer{text-align:center;margin:38px 0 24px;color:#4b5563}
-@media(max-width:700px){.menu,.club-list{grid-template-columns:1fr}.card{min-height:190px}main{margin:24px auto}.hero{padding:28px 18px}}
-.slogan-img{max-width:280px;width:100%;height:auto;display:block;margin:0 auto;}\n</style>
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--texto);
+  background:#f6f8f3;
+}
+.top{
+  background:white;
+  padding:18px 20px 10px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+}
+.top h1{margin:5px 0 2px;font-size:clamp(24px,4vw,38px);color:var(--verde-escuro)}
+.top p{margin:0 0 8px;color:#555}
+.back{
+  display:inline-block;
+  margin:12px 0 4px;
+  padding:9px 16px;
+  border-radius:22px;
+  background:var(--verde-escuro);
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+}
+.container{max-width:1180px;margin:0 auto;padding:22px 16px 40px}
+.hero{
+  background:linear-gradient(135deg,var(--verde),#b5d47a);
+  border-radius:18px;
+  padding:25px 24px;
+  color:#fff;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+  margin-bottom:22px;
+}
+.hero h2{margin:0 0 6px;font-size:clamp(24px,4vw,34px)}
+.hero p{margin:0;font-size:16px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  gap:16px;
+}
+.card{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  border:1px solid var(--linha);
+  box-shadow:0 3px 12px rgba(0,0,0,.05);
+}
+.card h3{
+  margin:0 0 8px;
+  color:var(--verde-escuro);
+  font-size:22px;
+}
+.badge{
+  display:inline-block;
+  background:var(--verde-claro);
+  color:var(--verde-escuro);
+  font-weight:bold;
+  padding:5px 9px;
+  border-radius:8px;
+  margin-bottom:10px;
+  font-size:13px;
+}
+.card p{margin:7px 0;line-height:1.45}
+.card strong{color:#333}
+.schedule{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid #eee;
+}
+.schedule div{
+  padding:5px 0;
+}
+.schedule span{
+  font-weight:bold;
+}
+.torneios{
+  margin-top:16px;
+  background:#fff;
+  border:2px dashed var(--verde);
+  border-radius:16px;
+  padding:20px;
+}
+.torneios h3{margin-top:0;color:var(--verde-escuro)}
+footer{text-align:center;color:#666;font-size:13px;margin-top:25px}
+@media(max-width:600px){
+  .container{padding:15px 10px 30px}
+  .card{padding:16px}
+  .hero{padding:20px 17px}
+}
+</style>
 </head>
 <body>
-<header><div class="header-content">
-<a href="index.html" aria-label="Voltar ao início"><img src="assets/images/logo-eb-manhente.png" alt="EB de Manhente"></a>
-<div><h1>Desporto Escolar</h1><p class="header-sub">Ofertas Extracurriculares 2026/2027</p></div>
-</div></header>
-<main>
-<section class="notice">
-<i class="fa-solid fa-person-running" aria-hidden="true"></i>
-<h2>Em breve</h2>
-<p>A oferta de <strong>Desporto Escolar</strong> da Escola Básica de Manhente será divulgada em breve.</p>
-</section>
-<a class="voltar" href="ofertas-extracurriculares.html"><i class="fa-solid fa-arrow-left"></i> Voltar às ofertas extracurriculares</a>
+
+<header class="top">
+  <h1>EB de Manhente</h1>
+  <p>Agrupamento de Escolas Alcaides de Faria</p>
+  <a class="back" href="index.html">← Voltar à página principal</a>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <h2>🏆 Desporto Escolar 2026/2027</h2>
+    <p>Equipas, modalidades, escalões e horários dos treinos.</p>
+  </section>
+
+  <section class="grid">
+
+    <article class="card">
+      <span class="badge">🏓 TÉNIS DE MESA</span>
+      <h3>Infantis B</h3>
+      <p><strong>Escalão:</strong> Masculino / Feminino</p>
+      <p><strong>Nascidos em:</strong> 2014, 2015, 2016…</p>
+      <p><strong>Professor(a):</strong> Rosa Maria Carvalho</p>
+      <div class="schedule">
+        <div><span>2.ª feira:</span> 13:45–14:15 e 14:25–15:15</div>
+        <div><span>5.ª feira:</span> 11:25–12:15</div>
+        <div><span>6.ª feira:</span> 12:25–13:15</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="badge">🏀 BASQUETEBOL</span>
+      <h3>Iniciados Masculino</h3>
+      <p><strong>Nascidos em:</strong> 2010 e 2011</p>
+      <p><strong>Professor:</strong> Paulo Pedroso</p>
+      <div class="schedule">
+        <div><span>4.ª feira:</span> 16:25–17:15 e 17:25–18:15</div>
+        <div><span>5.ª feira:</span> 16:25–17:15 e 17:25–18:15</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="badge">🚴 CICLISMO</span>
+      <h3>Todos os participantes do escalão indicado</h3>
+      <p><strong>Nascidos em:</strong> 2015, 2016, 2017, 2018</p>
+      <p><strong>Professor:</strong> Paulo Pedroso</p>
+      <div class="schedule">
+        <div><span>2.ª feira:</span> 14:25–15:15</div>
+        <div><span>3.ª feira:</span> 14:25–15:15</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="badge">🏐 VOLEIBOL</span>
+      <h3>Infantis B</h3>
+      <p><strong>Escalão:</strong> Masculino / Feminino</p>
+      <p><strong>Nascidos em:</strong> 2014, 2015, 2016</p>
+      <p><strong>Professor:</strong> Joaquim Barbosa</p>
+      <div class="schedule">
+        <div><span>2.ª feira:</span> 14:25–15:15</div>
+        <div><span>3.ª feira:</span> 14:25–15:15 e 15:25–16:15</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="badge">🏐 VOLEIBOL</span>
+      <h3>Iniciados</h3>
+      <p><strong>Escalão:</strong> Masculino / Feminino</p>
+      <p><strong>Nascidos em:</strong> 2012 e 2013</p>
+      <p><strong>Professor:</strong> Ricardo Sampaio</p>
+      <div class="schedule">
+        <div><span>3.ª feira:</span> 14:25–15:15</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="badge">🛼 PATINAGEM</span>
+      <h3>Todos</h3>
+      <p><strong>Professor(a):</strong> Olga Pereira</p>
+      <div class="schedule">
+        <div><span>4.ª feira:</span> 13:45–14:15 e 14:25–16:00</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <span class="badge">💃 DANÇA</span>
+      <h3>Todos</h3>
+      <p><strong>Professor(a):</strong> Rita Carneiro</p>
+      <div class="schedule">
+        <div><span>4.ª feira:</span> 14:25–15:15 e 15:25–16:25</div>
+      </div>
+    </article>
+
+  </section>
+
+  <section class="torneios">
+    <h3>🏅 Torneios JOGAR +</h3>
+    <p><strong>Destinatários:</strong> Todos</p>
+    <p><strong>Responsável:</strong> Ricardo Sampaio</p>
+    <p><strong>Horário:</strong> 4.ª feira — à tarde, mediante agendamento prévio.</p>
+  </section>
+
+  <footer>
+    EB de Manhente · Desporto Escolar 2026/2027
+  </footer>
 </main>
-<footer><img src="assets/images/uma_esc_vida.png" class="slogan-img" alt="Uma Escola Para a Vida"></footer>
-</body></html>
+</body>
+</html>
