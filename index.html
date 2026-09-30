@@ -190,7 +190,20 @@ section{
   box-shadow:0 6px 18px rgba(0,0,0,.10);
   cursor:default;
 }
-.bema:hover{ transform:none; }
+.bema:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 26px rgba(20,83,45,.22);
+}
+.bema:hover .icon-bema{
+  transform:scale(1.06) rotate(-1deg);
+}
+.bema:hover .texto-bema{
+  transform:translateX(3px);
+}
+.bema .icon-bema,
+.bema .texto-bema{
+  transition:transform .22s ease;
+}
 
 .icon-bema{
   height:34px;
@@ -350,7 +363,7 @@ footer img{max-width:260px;}
   .icon-aeaf{ height:20px; padding:2px 5px; }
 
   /* BEMA ocupa as 2 colunas */
-  .bema{ grid-column:1 / -1; }
+  .bema{ grid-column:1 / -1; cursor:pointer !important; }
   .icon-bema{ height:30px; padding:6px 10px; }
 
   /* Redes mais compactas */
@@ -601,14 +614,15 @@ footer img{max-width:260px;}
         Ofertas Extracurriculares 2026/2027
       </a>
 
-      <!-- BEMA (brevemente) -->
-      <div class="botao bema" aria-disabled="true" title="Brevemente">
+      <!-- BEMA -->
+      <a class="botao bema" style="cursor:pointer !important;" href="https://ebmanhente.github.io/bema/index.html"
+         target="_blank" rel="noopener" title="Abrir a BEMA">
         <img src="assets/images/BEMA.png" class="icon-bema" alt="BEMA - Biblioteca Escolar de Manhente">
         <div class="texto-bema">
           Biblioteca Escolar de Manhente
-          <small class="bema-breve"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> Brevemente</small>
+          <small class="bema-breve"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Em construção</small>
         </div>
-      </div>
+      </a>
 
       <a class="botao aeaf"
          href="https://aeaf.edu.pt"
